@@ -1,7 +1,13 @@
 /*
-@Time : 2022/6/13 18:49 
+@Time : 2022/6/13 18:49
 @Author : lianyz
-@Description : 
+@Description :
 */
 
 package mydocker
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, MyDocker")
+}
