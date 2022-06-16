@@ -22,6 +22,11 @@ const memoryChildCgroup = "testmemorylimit"
 
 func main() {
 
+	if len(os.Args) < 2 {
+		fmt.Println("usage: ./cgroup 100m")
+		return
+	}
+
 	if os.Args[0] == "/proc/self/exe" {
 		fmt.Printf("run %s process......\n", os.Args[0])
 
@@ -29,7 +34,7 @@ func main() {
 		fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
 		stress := fmt.Sprintf("stress --vm-bytes %s --vm-keep -m 1", os.Args[1])
 		fmt.Println(stress)
-		
+
 		cmd := exec.Command("sh", "-c", stress)
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.Stdin = os.Stdin
