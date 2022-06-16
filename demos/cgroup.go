@@ -26,21 +26,27 @@ func main() {
 		fmt.Printf("run %s process......\n", os.Args[0])
 
 		// 容器进程
-		fmt.Printf("current pid %d\n", syscall.Getpid())
+		fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
 		cmd := exec.Command("sh", "-c", "stress --vm-bytes 200m --vm-keep -m 1")
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		if err := cmd.Run(); err != nil {
+
+		if err := cmd.Start(); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
+		fmt.Printf("cmd [sh -c stress...] pid:%d \n", cmd.Process.Pid)
+
+		cmd.Wait()
 
 		fmt.Println("can not run to here......")
 	}
 
 	fmt.Printf("run %s process......\n", os.Args[0])
+	fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
 
 	cmd := exec.Command("/proc/self/exe")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
@@ -58,6 +64,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Printf("cmd [/proc/self/exe] pid:%d \n", cmd.Process.Pid)
 	fmt.Printf("ProcessID: %v\n", cmd.Process.Pid)
 	os.Mkdir(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup), 0755)
 	ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup, "tasks"),
