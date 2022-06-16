@@ -62,7 +62,7 @@ func main() {
 	cmd := exec.Command("/proc/self/exe", os.Args[1])
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS |
-			syscall.CLONE_NEWPID |
+			//syscall.CLONE_NEWPID |
 			syscall.CLONE_NEWNS,
 	}
 
@@ -76,7 +76,6 @@ func main() {
 	}
 
 	fmt.Printf("cmd [/proc/self/exe] pid:%d \n", cmd.Process.Pid)
-	fmt.Printf("ProcessID: %v\n", cmd.Process.Pid)
 	os.Mkdir(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup), 0755)
 	ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup, "tasks"),
 		[]byte(strconv.Itoa(cmd.Process.Pid)), 0644)
