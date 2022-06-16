@@ -1,7 +1,7 @@
 .DEFAULT: all
 
 .PHONY: all
-all: build run
+all: build
 
 .PHONY: build
 build:

@@ -51,6 +51,8 @@ func main() {
 		cmd.Wait()
 
 		fmt.Println("can not run to here......")
+
+		return
 	}
 
 	fmt.Printf("run %s process......\n", os.Args[0])
