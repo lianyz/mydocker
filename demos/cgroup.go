@@ -56,7 +56,7 @@ func main() {
 	}
 
 	fmt.Printf("run %s process......\n", os.Args[0])
-	fmt.Printf("main process:\tpid:%d\tppid:%d\n", syscall.Getpid(), syscall.Getppid())
+	fmt.Printf("[cgroup] main process:\tpid:%d\tppid:%d\n", syscall.Getpid(), syscall.Getppid())
 
 	cmd := exec.Command("/proc/self/exe", os.Args[1])
 	cmd.SysProcAttr = &syscall.SysProcAttr{
