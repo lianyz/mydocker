@@ -27,7 +27,10 @@ func main() {
 
 		// 容器进程
 		fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
-		cmd := exec.Command("sh", "-c", "stress --vm-bytes 2m --vm-keep -m 1")
+		stress := fmt.Sprintf("stress --vm-bytes %s --vm-keep -m 1", os.Args[1])
+		fmt.Println(stress)
+		
+		cmd := exec.Command("sh", "-c", stress)
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
@@ -48,7 +51,7 @@ func main() {
 	fmt.Printf("run %s process......\n", os.Args[0])
 	fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
 
-	cmd := exec.Command("/proc/self/exe")
+	cmd := exec.Command("/proc/self/exe", os.Args[1])
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS |
 			syscall.CLONE_NEWPID |
