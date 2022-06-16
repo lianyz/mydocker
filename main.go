@@ -4,7 +4,7 @@
 @Description :
 */
 
-package mydocker
+package main
 
 import (
 	"github.com/sirupsen/logrus"
