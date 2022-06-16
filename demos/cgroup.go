@@ -27,7 +27,7 @@ func main() {
 
 		// 容器进程
 		fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
-		cmd := exec.Command("sh", "-c", "stress --vm-bytes 200m --vm-keep -m 1")
+		cmd := exec.Command("sh", "-c", "stress --vm-bytes 2m --vm-keep -m 1")
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
