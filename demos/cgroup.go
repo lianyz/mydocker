@@ -33,14 +33,14 @@ func main() {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
-		if err := cmd.Start(); err != nil {
+		if err := cmd.Run(); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
 		fmt.Printf("cmd [sh -c stress...] pid:%d \n", cmd.Process.Pid)
 
-		cmd.Wait()
+		//cmd.Wait()
 
 		fmt.Println("can not run to here......")
 	}
