@@ -31,7 +31,7 @@ func main() {
 		fmt.Printf("run %s process......\n", os.Args[0])
 
 		// 容器进程
-		fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
+		fmt.Printf("[/proc/self/exe] process:\tpid:%d\tppid:%d\n", syscall.Getpid(), syscall.Getppid())
 		stress := fmt.Sprintf("stress --vm-bytes %s --vm-keep -m 1", os.Args[1])
 		fmt.Println(stress)
 
@@ -46,8 +46,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Printf("cmd [sh stress] pid:%d \n", cmd.Process.Pid)
-		fmt.Printf("cmd [sh -c stress...] pid:%d \n", cmd.Process.Pid)
+		fmt.Printf("[sh -c stress...] process:\tpid:%d \n", cmd.Process.Pid)
 
 		cmd.Wait()
 
@@ -57,7 +56,7 @@ func main() {
 	}
 
 	fmt.Printf("run %s process......\n", os.Args[0])
-	fmt.Printf("current pid:%d ppid:%d\n", syscall.Getpid(), syscall.Getppid())
+	fmt.Printf("main process:\tpid:%d\tppid:%d\n", syscall.Getpid(), syscall.Getppid())
 
 	cmd := exec.Command("/proc/self/exe", os.Args[1])
 	cmd.SysProcAttr = &syscall.SysProcAttr{
@@ -75,7 +74,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("cmd [/proc/self/exe] pid:%d \n", cmd.Process.Pid)
+	fmt.Printf("[/proc/self/exe] process:\tpid:%d\n", cmd.Process.Pid)
 	os.Mkdir(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup), 0755)
 	ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, memoryChildCgroup, "tasks"),
 		[]byte(strconv.Itoa(cmd.Process.Pid)), 0644)
