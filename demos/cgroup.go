@@ -46,6 +46,7 @@ func main() {
 			os.Exit(1)
 		}
 
+		fmt.Printf("cmd [sh stress] pid:%d \n", cmd.Process.Pid)
 		fmt.Printf("cmd [sh -c stress...] pid:%d \n", cmd.Process.Pid)
 
 		cmd.Wait()
