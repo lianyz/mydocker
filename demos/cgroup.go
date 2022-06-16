@@ -61,7 +61,7 @@ func main() {
 	cmd := exec.Command("/proc/self/exe", os.Args[1])
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWUTS |
-			//syscall.CLONE_NEWPID |
+			syscall.CLONE_NEWPID |
 			syscall.CLONE_NEWNS,
 	}
 
