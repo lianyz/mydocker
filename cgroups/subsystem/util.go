@@ -26,7 +26,7 @@ func GetCgroupPath(subsystem string, cgroupPath string, autoCreate bool) (string
 	cgroupTotalPath := path.Join(cgroupRootPath, cgroupPath)
 	_, err = os.Stat(cgroupTotalPath)
 	if err != nil {
-		return "", fmt.Errorf("cgroup path error")
+		return "", fmt.Errorf("cgroup path error %v", err)
 	}
 
 	if autoCreate && os.IsNotExist(err) {
