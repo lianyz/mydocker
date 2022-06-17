@@ -39,7 +39,9 @@ func RunContainerInitProcess() error {
 		return err
 	}
 
-	err = syscall.Exec(path, cmdArray[0:], os.Environ())
+	cmd := exec.Command(path, cmdArray...)
+	err = cmd.Run()
+	//err = syscall.Exec(path, cmdArray[0:], os.Environ())
 	if err != nil {
 		return err
 	}
