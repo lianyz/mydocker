@@ -25,17 +25,15 @@ func GetCgroupPath(subsystem string, cgroupPath string, autoCreate bool) (string
 
 	cgroupTotalPath := path.Join(cgroupRootPath, cgroupPath)
 	_, err = os.Stat(cgroupTotalPath)
-	if err != nil {
-		return "", fmt.Errorf("cgroup path error %v", err)
-	}
-
-	if autoCreate && os.IsNotExist(err) {
-		if err := os.MkdirAll(cgroupTotalPath, 0755); err != nil {
-			return "", err
+	if err == nil || (autoCreate && os.IsNotExist(err)) {
+		if os.IsNotExist(err) {
+			if err := os.MkdirAll(cgroupTotalPath, 0755); err != nil {
+				return "", err
+			}
 		}
+		return cgroupTotalPath, nil
 	}
-
-	return cgroupTotalPath, nil
+	return "", fmt.Errorf("cgroup path error %v", err)
 }
 
 // findCgroupMountPoint 找到挂载了subsystem的hierarchy cgroup根节点所在目录
