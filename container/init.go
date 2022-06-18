@@ -101,7 +101,7 @@ func pivotRoot() error {
 		return err
 	}
 
-	root = filepath.Join(root, "image/busybox")
+	//root = filepath.Join(root, "image/busybox")
 	logrus.Infof("current location is %s", root)
 
 	// 为了使当前root的老root和新root不在同一个文件系统下，我们把root重新mount了一次

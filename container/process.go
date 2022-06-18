@@ -7,6 +7,7 @@
 package container
 
 import (
+	"github.com/lianyz/mydocker/common"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
@@ -14,7 +15,7 @@ import (
 )
 
 // NewParentProcess 创建一个会隔离namespace进程的Command
-func NewParentProcess(tty bool, asChild bool) (*exec.Cmd, *os.File) {
+func NewParentProcess(tty bool, asChild bool, volume string) (*exec.Cmd, *os.File) {
 	readPipe, writePipe, _ := os.Pipe()
 
 	// 调用自身，传入init参数，也就是执行initCommand
@@ -43,6 +44,14 @@ func NewParentProcess(tty bool, asChild bool) (*exec.Cmd, *os.File) {
 	cmd.ExtraFiles = []*os.File{
 		readPipe,
 	}
+
+	err := NewWorkSpace(common.RootPath, common.MntPath, volume)
+	if err != nil {
+		logrus.Errorf("new work space, err: %v", err)
+	}
+
+	// 指定容器初始化后的工作目录
+	cmd.Dir = common.MntPath
 
 	return cmd, writePipe
 }

@@ -38,6 +38,10 @@ var runCommand = cli.Command{
 			Name:  "cpuset",
 			Usage: "cpuset limit",
 		},
+		cli.StringFlag{
+			Name:  "v",
+			Usage: "docker volume",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
@@ -45,9 +49,10 @@ var runCommand = cli.Command{
 		}
 		tty := context.Bool("ti")
 		asChild := context.Bool("ch")
+		volume := context.String("v")
 
 		logrus.Infof("args tty:%v aschild:%v", tty, asChild)
-		res := &subsystem.ResourceConfig{
+		resourceConfig := &subsystem.ResourceConfig{
 			MemoryLimit: context.String("m"),
 			CpuSet:      context.String("cpuset"),
 			CpuShare:    context.String("cpushare"),
@@ -58,7 +63,7 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args() {
 			cmdArray = append(cmdArray, arg)
 		}
-		Run(cmdArray, tty, asChild, res)
+		Run(cmdArray, tty, asChild, resourceConfig, volume)
 		return nil
 	},
 }

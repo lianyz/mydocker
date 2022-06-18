@@ -15,8 +15,8 @@ import (
 	"strings"
 )
 
-func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfig) {
-	parent, writePipe := container.NewParentProcess(tty, asChild)
+func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfig, volume string) {
+	parent, writePipe := container.NewParentProcess(tty, asChild, volume)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
 		return
