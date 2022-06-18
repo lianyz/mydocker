@@ -89,10 +89,9 @@ func pivotRoot() error {
 	if err != nil {
 		return err
 	}
-	logrus.Infof("current location is %s", root)
 
-	root = "/root/mydocker-image/busybox"
-	logrus.Infof("set root dir as %s", root)
+	root = filepath.Join(root, "image/busybox")
+	logrus.Infof("current location is %s", root)
 
 	err = syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
 	if err != nil {
