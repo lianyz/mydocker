@@ -104,3 +104,47 @@ func createMountPoint(rootPath string, mntPath string) error {
 func mountVolume(rootPath, mntPath, volume string) {
 
 }
+
+// DeleteWorkSpace 删除容器工作空间
+func DeleteWorkSpace(rootPath, mntPath, volume string) error {
+	// 卸载挂载点
+	err := unMountPoint(mntPath)
+	if err != nil {
+		return err
+	}
+
+	// 删除读写层
+	err = deleteWriteLayer(rootPath)
+	if err != nil {
+		return err
+	}
+
+	// 删除宿主机与文件系统映射
+	deleteVolume(mntPath, volume)
+
+	return nil
+}
+
+func unMountPoint(mntPath string) error {
+	if _, err := exec.Command("umount", mntPath).CombinedOutput(); err != nil {
+		logrus.Errorf("unmount mnt, err: %v", err)
+		return err
+	}
+
+	err := os.RemoveAll(mntPath)
+	if err != nil {
+		logrus.Errorf("remove mnt path, err: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func deleteWriteLayer(rootPath string) error {
+	writeLayerPath := path.Join(rootPath, common.WriteLayer)
+	return os.RemoveAll(writeLayerPath)
+}
+
+func deleteVolume(mntPath, volume string) {
+
+}

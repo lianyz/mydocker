@@ -9,6 +9,7 @@ package main
 import (
 	"github.com/lianyz/mydocker/cgroups"
 	"github.com/lianyz/mydocker/cgroups/subsystem"
+	"github.com/lianyz/mydocker/common"
 	"github.com/lianyz/mydocker/container"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -39,7 +40,16 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 
 	sendInitCommand(cmdArray, writePipe)
 
-	parent.Wait()
+	err := parent.Wait()
+	if err != nil {
+		logrus.Errorf("parent wait, err: %v", err)
+	}
+
+	// 删除容器工作空间
+	err = container.DeleteWorkSpace(common.RootPath, common.MntPath, volume)
+	if err != nil {
+		logrus.Errorf("delete work space, err: %v", err)
+	}
 }
 
 func sendInitCommand(cmdArray []string, writePipe *os.File) {
