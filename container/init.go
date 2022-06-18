@@ -131,13 +131,11 @@ func pivotRoot() error {
 		return fmt.Errorf("chdir / %v", err)
 	}
 
-	//pivotDir = filepath.Join("/", ".pivot_root")
-	//if err := syscall.Unmount(pivotDir, syscall.MNT_DETACH); err != nil {
-	//	return fmt.Errorf("unmount pivot_root dir %v", err)
-	//}
-	//
-	//// 删除临时文件夹
-	//return os.Remove(pivotDir)
+	pivotDir = filepath.Join("/", ".pivot_root")
+	if err := syscall.Unmount(pivotDir, syscall.MNT_DETACH); err != nil {
+		return fmt.Errorf("unmount pivot_root dir %v", err)
+	}
 
-	return nil
+	// 删除临时文件夹
+	return os.Remove(pivotDir)
 }
