@@ -44,7 +44,7 @@ var runCommand = cli.Command{
 			return fmt.Errorf("missing container args")
 		}
 		tty := context.Bool("ti")
-		asChild := context.Bool("child")
+		asChild := context.Bool("ch")
 
 		logrus.Infof("args tty:%v aschild:%v", tty, asChild)
 		res := &subsystem.ResourceConfig{
@@ -68,12 +68,12 @@ var initCommand = cli.Command{
 	Usage: "Init container process run user's process in container. Do not call it outside",
 	Flags: []cli.Flag{
 		cli.BoolFlag{
-			Name:  "child",
+			Name:  "ch",
 			Usage: "as child process",
 		},
 	},
 	Action: func(context *cli.Context) error {
-		asChild := context.Bool("child")
+		asChild := context.Bool("ch")
 		logrus.Infof("init come on. args: %v", asChild)
 		return container.RunContainerInitProcess(asChild)
 	},
