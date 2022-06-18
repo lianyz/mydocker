@@ -50,6 +50,8 @@ func NewParentProcess(tty bool, asChild bool, volume string) (*exec.Cmd, *os.Fil
 		logrus.Errorf("new work space, err: %v", err)
 	}
 
+	logrus.Infof("change workdir, new:%s, old:%s", common.MntPath, cmd.Dir)
+
 	// 指定容器初始化后的工作目录
 	cmd.Dir = common.MntPath
 
