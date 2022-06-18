@@ -23,7 +23,7 @@ var runCommand = cli.Command{
 			Usage: "enable tty",
 		},
 		cli.BoolFlag{
-			Name:  "child",
+			Name:  "ch",
 			Usage: "as child process",
 		},
 		cli.StringFlag{
@@ -46,6 +46,7 @@ var runCommand = cli.Command{
 		tty := context.Bool("ti")
 		asChild := context.Bool("child")
 
+		logrus.Infof("args tty:%v aschild:%v", tty, asChild)
 		res := &subsystem.ResourceConfig{
 			MemoryLimit: context.String("m"),
 			CpuSet:      context.String("cpuset"),
