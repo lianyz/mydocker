@@ -39,7 +39,7 @@ func NewWorkSpace(rootPath string, mntPath string, volume string) error {
 	}
 
 	wd, _ := os.Getwd()
-	logrus.Infof("create mount point, mntPath:%s os.wd:%s", mntPath, wd)
+	logrus.Infof("create mount point, mntPath:%s current location is: %s", mntPath, wd)
 
 	// 设置宿主机与容器文件映射
 	mountVolume(rootPath, mntPath, volume)
