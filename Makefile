@@ -16,13 +16,14 @@ tools:
 
 .PHONY: run
 run:
-	./my-docker run -ti /bin/sh
+	./my-docker run -ti sh
+
+.PHONY: run.stress
+run.stress:
+	./mydocker run -ti -m 100m stress --vm-bytes 50m --vm-keep --vm 1
 
 .PHONY: test
 test:
 	memtester 100M 1
 
-.PHONY: run.echo
-run.echo:
-	./go-linux-kernel run echo hello
 

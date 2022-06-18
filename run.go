@@ -42,7 +42,7 @@ func Run(cmdArray []string, tty bool, res *subsystem.ResourceConfig) {
 
 func sendInitCommand(cmdArray []string, writePipe *os.File) {
 	command := strings.Join(cmdArray, " ")
-	logrus.Infof("command all is %s", command)
+	logrus.Infof("command all is: %s", command)
 	_, _ = writePipe.WriteString(command)
 	_ = writePipe.Close()
 }
