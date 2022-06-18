@@ -69,11 +69,11 @@ func setUpMount() error {
 		return err
 	}
 
-	//err = pivotRoot()
-	//if err != nil {
-	//	logrus.Errorf("pivot root, err: %v", err)
-	//	return err
-	//}
+	err = pivotRoot()
+	if err != nil {
+		logrus.Errorf("pivot root, err: %v", err)
+		return err
+	}
 
 	// mount proc
 	defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV
