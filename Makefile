@@ -10,6 +10,15 @@ build:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/ns demos/ns.go
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/cgroup demos/cgroup.go
 
+.PHONY: mount
+mount:
+	mount -t aufs -o dirs=./image/writeLayer:./image/busybox mydocker ./image/mnt
+
+
+.PHONY: umount
+umount:
+	umount mydocker
+
 .PHONY: tools
 tools:
 	apt install memtester
