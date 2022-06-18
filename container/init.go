@@ -59,16 +59,17 @@ func readUserCommand() []string {
 }
 
 func setUpMount() error {
-	err := pivotRoot()
-	if err != nil {
-		logrus.Errorf("pivot root, err: %v", err)
-		return err
-	}
 
 	// systemd加入linux后，mount namespace就变成shared by default，
 	// 所以必须显式声明要这个新的mount namespace独立
-	err = syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
+	err := syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
 	if err != nil {
+		return err
+	}
+
+	err = pivotRoot()
+	if err != nil {
+		logrus.Errorf("pivot root, err: %v", err)
 		return err
 	}
 
@@ -100,11 +101,6 @@ func pivotRoot() error {
 
 	root = filepath.Join(root, "image/busybox")
 	logrus.Infof("current location is %s", root)
-
-	err = syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
-	if err != nil {
-		return err
-	}
 
 	// 为了使当前root的老root和新root不在同一个文件系统下，我们把root重新mount了一次
 	// bind mount是把相同的内容换了一个挂载点的挂载方法
