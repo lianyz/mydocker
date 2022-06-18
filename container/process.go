@@ -19,7 +19,7 @@ func NewParentProcess(tty bool, asChild bool) (*exec.Cmd, *os.File) {
 	// 调用自身，传入init参数，也就是执行initCommand
 	args := "init"
 	if asChild {
-		args += " -ch"
+		args += " --ch"
 	}
 	cmd := exec.Command("/proc/self/exe", args)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
