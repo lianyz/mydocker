@@ -39,9 +39,8 @@ func RunContainerInitProcess() error {
 	//	return err
 	//}
 
-	command := strings.Join(cmdArray[1:], " ")
-	cmd := exec.Command(cmdArray[0], command)
-	logrus.Infof("command name: %s args: %s", cmdArray[0], command)
+	cmd := exec.Command(cmdArray[0], cmdArray[1:]...)
+	logrus.Infof("command name: %s args: %v", cmdArray[0], cmdArray[1:])
 	cmd.SysProcAttr = &syscall.SysProcAttr{}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
