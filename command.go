@@ -73,6 +73,7 @@ var initCommand = cli.Command{
 		},
 	},
 	Action: func(context *cli.Context) error {
+		logrus.Infof("begin init come on. args: %v", context.Args())
 		asChild := context.Bool("ch")
 		logrus.Infof("init come on. args: %v", asChild)
 		return container.RunContainerInitProcess(asChild)
