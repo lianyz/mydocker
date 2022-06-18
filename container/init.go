@@ -80,6 +80,14 @@ func setUpMount() error {
 		return err
 	}
 
+	// mount tmpfs, tmpfs是一种基于内存的文件系统
+	err = syscall.Mount("tmpfs", "/dev", "tmpfs",
+		syscall.MS_NOSUID|syscall.MS_STRICTATIME, "mode=755")
+	if err != nil {
+		logrus.Errorf("mount tmpfs, ere: %v", err)
+		return err
+	}
+
 	return nil
 }
 
