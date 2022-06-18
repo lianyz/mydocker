@@ -26,6 +26,8 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 		return
 	}
 
+	logrus.Infof("start parent process succeed!")
+
 	// 添加资源限制
 	cgroupManager := cgroups.NewCGroupManager("mydocker")
 	// 删除资源限制
