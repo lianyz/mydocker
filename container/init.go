@@ -31,11 +31,12 @@ func RunContainerInitProcess(asChild bool) error {
 		return err
 	}
 
-	if asChild {
-		err = runProcessAsChild(cmdArray)
-	} else {
-		err = runProcessInsteadParent(cmdArray)
-	}
+	err = runProcessAsChild(cmdArray)
+	//if asChild {
+	//	err = runProcessAsChild(cmdArray)
+	//} else {
+	//	err = runProcessInsteadParent(cmdArray)
+	//}
 	if err != nil {
 		return err
 	}
