@@ -64,10 +64,10 @@ func setUpMount() error {
 
 	// systemd加入linux后，mount namespace就变成shared by default，
 	// 所以必须显式声明要这个新的mount namespace独立
-	//err = syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
-	//if err != nil {
-	//	return err
-	//}
+	err = syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
+	if err != nil {
+		return err
+	}
 
 	//err = pivotRoot()
 	//if err != nil {
