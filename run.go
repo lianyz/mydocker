@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func Run(cmdArray []string, tty bool, res *subsystem.ResourceConfig) {
+func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfig) {
 	parent, writePipe := container.NewParentProcess(tty)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
@@ -35,12 +35,15 @@ func Run(cmdArray []string, tty bool, res *subsystem.ResourceConfig) {
 	// 将容器进程加入到各个subsystem挂载对应的cgroup中
 	cgroupManager.Apply(parent.Process.Pid)
 
-	sendInitCommand(cmdArray, writePipe)
+	sendInitCommand(cmdArray, writePipe, asChild)
 
 	parent.Wait()
 }
 
-func sendInitCommand(cmdArray []string, writePipe *os.File) {
+func sendInitCommand(cmdArray []string, writePipe *os.File, asChild bool) {
+	if asChild {
+		cmdArray = append(cmdArray, "--child")
+	}
 	command := strings.Join(cmdArray, " ")
 	logrus.Infof("command all is: %s", command)
 	_, _ = writePipe.WriteString(command)

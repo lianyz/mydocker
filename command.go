@@ -22,6 +22,10 @@ var runCommand = cli.Command{
 			Name:  "ti",
 			Usage: "enable tty",
 		},
+		cli.BoolFlag{
+			Name:  "child",
+			Usage: "as child process",
+		},
 		cli.StringFlag{
 			Name:  "m",
 			Usage: "memory limit",
@@ -40,6 +44,7 @@ var runCommand = cli.Command{
 			return fmt.Errorf("missing container args")
 		}
 		tty := context.Bool("ti")
+		asChild := context.Bool("child")
 
 		res := &subsystem.ResourceConfig{
 			MemoryLimit: context.String("m"),
@@ -52,7 +57,7 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args() {
 			cmdArray = append(cmdArray, arg)
 		}
-		Run(cmdArray, tty, res)
+		Run(cmdArray, tty, asChild, res)
 		return nil
 	},
 }
@@ -60,8 +65,15 @@ var runCommand = cli.Command{
 var initCommand = cli.Command{
 	Name:  "init",
 	Usage: "Init container process run user's process in container. Do not call it outside",
+	Flags: []cli.Flag{
+		cli.BoolFlag{
+			Name:  "child",
+			Usage: "as child process",
+		},
+	},
 	Action: func(context *cli.Context) error {
-		logrus.Infof("init come on")
-		return container.RunContainerInitProcess()
+		asChild := context.Bool("child")
+		logrus.Infof("init come on. args: %v", asChild)
+		return container.RunContainerInitProcess(asChild)
 	},
 }
