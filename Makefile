@@ -16,11 +16,11 @@ tools:
 
 .PHONY: run
 run:
-	./my-docker run -ti sh
+	./bin/my-docker run -ti sh
 
 .PHONY: run.stress
 run.stress:
-	./mydocker run -ti -m 100m stress --vm-bytes 50m --vm-keep --vm 1
+	./bin/mydocker run -ti -m 100m stress --vm-bytes 50m --vm-keep --vm 1
 
 .PHONY: test
 test:
