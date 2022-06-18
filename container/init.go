@@ -39,8 +39,8 @@ func RunContainerInitProcess() error {
 	//	return err
 	//}
 
-	command := strings.Join(cmdArray, " ")
-	cmd := exec.Command("sh", "-c", command)
+	command := strings.Join(cmdArray[1:], " ")
+	cmd := exec.Command(cmdArray[0], command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
