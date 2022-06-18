@@ -16,7 +16,7 @@ tools:
 
 .PHONY: run
 run:
-	./bin/my-docker run -ti sh
+	./bin/mydocker run -ti sh
 
 .PHONY: run.stress
 run.stress:
