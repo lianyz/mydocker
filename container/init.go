@@ -137,5 +137,7 @@ func pivotRoot() error {
 	}
 
 	// 删除临时文件夹
-	return os.Remove(pivotDir)
+	//return os.Remove(pivotDir)
+
+	return nil
 }
