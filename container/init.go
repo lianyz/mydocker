@@ -33,13 +33,21 @@ func RunContainerInitProcess() error {
 	}
 
 	// 在系统环境PATH中寻找命令的绝对路径
-	path, err := exec.LookPath(cmdArray[0])
-	if err != nil {
-		logrus.Errorf("look %s path, err: %v", cmdArray[0], err)
-		return err
-	}
+	//path, err := exec.LookPath(cmdArray[0])
+	//if err != nil {
+	//	logrus.Errorf("look %s path, err: %v", cmdArray[0], err)
+	//	return err
+	//}
 
-	err = syscall.Exec(path, cmdArray[0:], os.Environ())
+	command := strings.Join(cmdArray, " ")
+	cmd := exec.Command("sh", "-c", command)
+	cmd.SysProcAttr = &syscall.SysProcAttr{}
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err = cmd.Run()
+	//err = syscall.Exec(path, cmdArray[0:], os.Environ())
 	if err != nil {
 		return err
 	}
