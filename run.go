@@ -53,6 +53,8 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 			logrus.Errorf("delete work space, err: %v", err)
 		}
 
+		logrus.Infof("run begin destroy cgroup resource limit")
+
 		// 删除资源限制
 		cgroupManager.Destroy()
 	}
