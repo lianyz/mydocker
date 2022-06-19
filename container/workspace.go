@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 )
 
 // NewWorkSpace 创建容器运行时目录
@@ -102,7 +103,40 @@ func createMountPoint(rootPath string, mntPath string) error {
 }
 
 func mountVolume(rootPath, mntPath, volume string) {
+	if volume == "" {
+		return
+	}
 
+	volumes := strings.Split(volume, ":")
+	if len(volumes) != 2 {
+		logrus.Errorf("volume parameter input is not correct")
+		return
+	}
+
+	// 创建宿主机中的文件路径
+	hostPath := volumes[0]
+	if err := common.Mkdir(hostPath); err != nil {
+		logrus.Errorf("make host volume path: %s, err: %v", hostPath, err)
+		return
+	}
+
+	// 创建容器内挂载点
+	containerPath := volumes[1]
+	containerVolumePath := path.Join(common.MntPath, containerPath)
+	if err := common.Mkdir(containerVolumePath); err != nil {
+		logrus.Errorf("make container volume path: %s, err: %v", containerVolumePath, err)
+		return
+	}
+
+	// 把宿主机文件目录挂载到容器挂载点中
+	dirs := fmt.Sprintf("dirs=%s", hostPath)
+	cmd := exec.Command("mount", "-t", "aufs", "-o", dirs, "none", containerVolumePath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		logrus.Errorf("mount volume path, err: %v", err)
+	}
 }
 
 // DeleteWorkSpace 删除容器工作空间
@@ -146,5 +180,18 @@ func deleteWriteLayer(rootPath string) error {
 }
 
 func deleteVolume(mntPath, volume string) {
+	if volume == "" {
+		return
+	}
 
+	volumes := strings.Split(volume, ":")
+	if len(volumes) != 2 {
+		logrus.Errorf("volume parameter input is not correct")
+		return
+	}
+
+	containerVolumePath := path.Join(mntPath, volumes[1])
+	if _, err := exec.Command("umount", containerVolumePath).CombinedOutput(); err != nil {
+		logrus.Errorf("unmount container volume path, err: %v", err)
+	}
 }
