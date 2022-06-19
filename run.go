@@ -40,15 +40,17 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 
 	sendInitCommand(cmdArray, writePipe)
 
-	err := parent.Wait()
-	if err != nil {
-		logrus.Errorf("parent wait, err: %v", err)
-	}
+	if tty {
+		err := parent.Wait()
+		if err != nil {
+			logrus.Errorf("parent wait, err: %v", err)
+		}
 
-	// 删除容器工作空间
-	err = container.DeleteWorkSpace(common.RootPath, common.MntPath, volume)
-	if err != nil {
-		logrus.Errorf("delete work space, err: %v", err)
+		// 删除容器工作空间
+		err = container.DeleteWorkSpace(common.RootPath, common.MntPath, volume)
+		if err != nil {
+			logrus.Errorf("delete work space, err: %v", err)
+		}
 	}
 }
 

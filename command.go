@@ -42,12 +42,21 @@ var runCommand = cli.Command{
 			Name:  "v",
 			Usage: "docker volume",
 		},
+		cli.BoolFlag{
+			Name:  "d",
+			Usage: "detach container",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
 			return fmt.Errorf("missing container args")
 		}
 		tty := context.Bool("ti")
+		detach := context.Bool("d")
+		if tty && detach {
+			return fmt.Errorf("ti and d parameter can not both provided")
+		}
+
 		asChild := context.Bool("ch")
 		volume := context.String("v")
 
