@@ -141,7 +141,10 @@ func mountVolume(rootPath, mntPath, volume string) {
 
 // DeleteWorkSpace 删除容器工作空间
 func DeleteWorkSpace(rootPath, mntPath, volume string) error {
-	// 卸载挂载点
+	// 删除容器里volume挂载点的文件系统
+	deleteVolume(mntPath, volume)
+
+	// 卸载整个容器文件系统的挂载点
 	err := unMountPoint(mntPath)
 	if err != nil {
 		return err
@@ -153,13 +156,11 @@ func DeleteWorkSpace(rootPath, mntPath, volume string) error {
 		return err
 	}
 
-	// 删除宿主机与文件系统映射
-	deleteVolume(mntPath, volume)
-
 	return nil
 }
 
 func unMountPoint(mntPath string) error {
+
 	if _, err := exec.Command("umount", mntPath).CombinedOutput(); err != nil {
 		logrus.Errorf("unmount mnt, err: %v", err)
 		return err
