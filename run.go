@@ -57,6 +57,12 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 func sendInitCommand(cmdArray []string, writePipe *os.File) {
 	command := strings.Join(cmdArray, " ")
 	logrus.Infof("command all is: %s", command)
-	_, _ = writePipe.WriteString(command)
-	_ = writePipe.Close()
+	_, err := writePipe.WriteString(command)
+	if err != nil {
+		logrus.Errorf("send init command write pipe, err: %v", err)
+		return
+	}
+	if err := writePipe.Close(); err != nil {
+		logrus.Errorf("send init command close pipe, err: %v", err)
+	}
 }
