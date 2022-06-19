@@ -31,6 +31,9 @@ run:
 run.v:
 	./bin/mydocker run -ti -v /root/volume:/containerVolume sh
 
+.PHONY: run.d
+run.d:
+	./bin/mydocker run -d top
 .PHONY: run.stress
 run.stress:
 	./bin/mydocker run -ti -m 100m stress --vm-bytes 50m --vm-keep --vm 1
