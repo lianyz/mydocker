@@ -38,6 +38,7 @@ func (c *CGroupManager) Apply(pid int) {
 }
 
 func (c *CGroupManager) Destroy() {
+	logrus.Infof("destroy cgroup resource limit")
 	for _, subsystem := range subsystem.Subsystems {
 		err := subsystem.Remove(c.Path)
 		if err != nil {
