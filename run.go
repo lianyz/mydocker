@@ -31,8 +31,6 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 
 	// 添加资源限制
 	cgroupManager := cgroups.NewCGroupManager("mydocker")
-	// 删除资源限制
-	defer cgroupManager.Destroy()
 
 	logrus.Infof("run set process resource limit")
 
@@ -54,6 +52,9 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 		if err != nil {
 			logrus.Errorf("delete work space, err: %v", err)
 		}
+
+		// 删除资源限制
+		cgroupManager.Destroy()
 	}
 
 	logrus.Infof("run finished")
