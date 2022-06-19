@@ -104,7 +104,7 @@ func pivotRoot() error {
 		return err
 	}
 
-	logrus.Infof("current location is: %s", root)
+	logrus.Infof("pivot root current location is: %s", root)
 
 	// 为了使当前root的老root和新root不在同一个文件系统下，我们把root重新mount了一次
 	// bind mount是把相同的内容换了一个挂载点的挂载方法
