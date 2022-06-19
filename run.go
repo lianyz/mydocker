@@ -35,6 +35,7 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 	defer cgroupManager.Destroy()
 
 	logrus.Infof("run set process resource limit")
+
 	// 设置资源限制
 	cgroupManager.Set(res)
 	// 将容器进程加入到各个subsystem挂载对应的cgroup中
@@ -54,6 +55,8 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 			logrus.Errorf("delete work space, err: %v", err)
 		}
 	}
+
+	logrus.Infof("run finished")
 }
 
 func sendInitCommand(cmdArray []string, writePipe *os.File) {
