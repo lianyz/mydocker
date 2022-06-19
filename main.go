@@ -20,8 +20,9 @@ func main() {
 	app.Usage = usage
 
 	app.Commands = []cli.Command{
-		runCommand,
 		initCommand,
+		runCommand,
+		commitCommand,
 	}
 
 	app.Before = func(context *cli.Context) error {

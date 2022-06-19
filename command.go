@@ -84,3 +84,24 @@ var initCommand = cli.Command{
 		return container.RunContainerInitProcess(asChild)
 	},
 }
+
+// 镜像打包
+var commitCommand = cli.Command{
+	Name:  "commit",
+	Usage: "docker commit a container into image",
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "c",
+			Usage: "export image path",
+		},
+	},
+	Action: func(context *cli.Context) error {
+		if len(context.Args()) < 1 {
+			return fmt.Errorf("missing container name")
+		}
+
+		imageName := context.Args().Get(0)
+		imagePath := context.String("c")
+		return container.CommitContainer(imageName, imagePath)
+	},
+}

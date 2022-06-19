@@ -35,6 +35,10 @@ run.v:
 run.stress:
 	./bin/mydocker run -ti -m 100m stress --vm-bytes 50m --vm-keep --vm 1
 
+.PHONY: commit
+commit:
+	./bin/mydocker commit image
+
 .PHONY: test
 test:
 	memtester 100M 1
