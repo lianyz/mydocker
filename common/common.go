@@ -17,6 +17,18 @@ const (
 	WriteLayer = "writeLayer"
 )
 
+const (
+	Running = "running"
+	Stop    = "stopped"
+	Exit    = "exited"
+)
+
+const (
+	DefaultContainerInfoPath = "/var/run/mydocker"
+	ContainerInfoFileName    = "config.json"
+	ContainerLogFileName     = "container.log"
+)
+
 func Mkdir(path string) error {
 	if IsNotExist(path) {
 		return os.MkdirAll(path, os.ModePerm)

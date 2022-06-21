@@ -46,6 +46,10 @@ var runCommand = cli.Command{
 			Name:  "d",
 			Usage: "detach container",
 		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "docker name",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
@@ -59,6 +63,7 @@ var runCommand = cli.Command{
 
 		asChild := context.Bool("ch")
 		volume := context.String("v")
+		containerName := context.String("name")
 
 		logrus.Infof("args tty:%v aschild:%v", tty, asChild)
 		resourceConfig := &subsystem.ResourceConfig{
@@ -72,7 +77,7 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args() {
 			cmdArray = append(cmdArray, arg)
 		}
-		Run(cmdArray, tty, asChild, resourceConfig, volume)
+		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName)
 		return nil
 	},
 }

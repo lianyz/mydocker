@@ -16,7 +16,8 @@ import (
 	"strings"
 )
 
-func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfig, volume string) {
+func Run(cmdArray []string, tty bool, asChild bool,
+	res *subsystem.ResourceConfig, volume, containerName string) {
 	parent, writePipe := container.NewParentProcess(tty, asChild, volume)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
@@ -29,6 +30,15 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 
 	logrus.Infof("start parent process succeed!")
 
+	containerID := container.GenContainerID(10)
+	if containerName == "" {
+		containerName = containerID
+	}
+	// 记录容器信息
+	err := container.RecordContainerInfo(parent.Process.Pid, cmdArray, containerName, containerID)
+	if err != nil {
+		logrus.Errorf("record container info, err: %v", err)
+	}
 	// 添加资源限制
 	cgroupManager := cgroups.NewCGroupManager("mydocker")
 
