@@ -60,7 +60,14 @@ func RecordContainerInfo(containerPID int, cmdArray []string, containerName, con
 	}
 
 	return nil
+}
 
+func DeleteContainerInfo(containerName string) {
+	dir := path.Join(common.DefaultContainerInfoPath, containerName)
+	err := os.RemoveAll(dir)
+	if err != nil {
+		logrus.Errorf("remove container info, err: %v", err)
+	}
 }
 
 func GenContainerID(n int) string {

@@ -67,6 +67,9 @@ func Run(cmdArray []string, tty bool, asChild bool,
 
 		// 删除资源限制
 		cgroupManager.Destroy()
+
+		// 删除容器信息
+		container.DeleteContainerInfo(containerName)
 	}
 
 	logrus.Infof("run finished")
