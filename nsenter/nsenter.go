@@ -27,4 +27,4 @@ __attribute__((constructor)) void enter_namespace(void) {
     }
 }
 */
-//import "C"
+import "C"
