@@ -5,7 +5,7 @@ all: build
 
 .PHONY: build
 build:
-	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 CC="/usr/local/bin/x86_64-linux-musl-gcc" go build -o ./bin/mydocker
+	CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o ./bin/mydocker
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/uts demos/uts.go
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/ns demos/ns.go
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/cgroup demos/cgroup.go
