@@ -29,6 +29,11 @@ const (
 	ContainerLogFileName     = "container.log"
 )
 
+const (
+	EnvExecPid = "docker_pid"
+	EnvExecCmd = "docker_cmd"
+)
+
 func Mkdir(path string) error {
 	if IsNotExist(path) {
 		return os.MkdirAll(path, os.ModePerm)
