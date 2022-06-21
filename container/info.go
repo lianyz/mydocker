@@ -87,7 +87,7 @@ func ListContainerInfo() {
 	w := tabwriter.NewWriter(os.Stdout, 12, 1, 2, ' ', 0)
 	_, _ = fmt.Fprint(w, "ID\tNAME\tPID\tSTATUS\tCOMMAND\tCREATED\n")
 	for _, info := range infos {
-		_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t\n",
+		_, _ = fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 			info.Id, info.Name, info.Pid, info.Status, info.Command, info.CreateTime)
 	}
 
