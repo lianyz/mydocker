@@ -10,6 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
+
+	_ "github.com/lianyz/mydocker/nsenter"
 )
 
 const usage = `mydocker`
