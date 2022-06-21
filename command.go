@@ -119,3 +119,12 @@ var commitCommand = cli.Command{
 		return container.CommitContainer(imageName, imagePath)
 	},
 }
+
+var listCommand = cli.Command{
+	Name:  "ps",
+	Usage: "list all container",
+	Action: func(context *cli.Context) error {
+		container.ListContainerInfo()
+		return nil
+	},
+}
