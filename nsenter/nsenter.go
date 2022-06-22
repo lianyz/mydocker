@@ -20,9 +20,9 @@ __attribute__((constructor)) void enter_namespace(void) {
     char *docker_pid;
     docker_pid = getenv("docker_pid");
     if (docker_pid) {
-        fprintf(stdout, "get docker_pid=%s\n", docker_pid);
+        fprintf(stdout, "******get docker_pid=%s\n", docker_pid);
     } else {
-        fprintf(stdout, "missing docker_pid env skip nsenter");
+        fprintf(stdout, "******missing docker_pid env skip nsenter\n");
         return;
     }
 }
