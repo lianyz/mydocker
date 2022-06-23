@@ -31,4 +31,6 @@ func LookContainerLog(containerName string) {
 	}
 
 	_, _ = fmt.Fprint(os.Stdout, string(bs))
+
+	fmt.Println()
 }
