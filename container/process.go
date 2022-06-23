@@ -11,11 +11,12 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
+	"path"
 	"syscall"
 )
 
 // NewParentProcess 创建一个会隔离namespace进程的Command
-func NewParentProcess(tty bool, asChild bool, volume string) (*exec.Cmd, *os.File) {
+func NewParentProcess(tty bool, asChild bool, volume, containerName string) (*exec.Cmd, *os.File) {
 	readPipe, writePipe, _ := os.Pipe()
 
 	// 调用自身，传入init参数，也就是执行initCommand
@@ -39,8 +40,21 @@ func NewParentProcess(tty bool, asChild bool, volume string) (*exec.Cmd, *os.Fil
 		cmd.Stdin = os.Stdout
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
+	} else {
+		logDir := path.Join(common.DefaultContainerInfoPath, containerName)
+		if err := common.Mkdir(logDir); err != nil {
+			logrus.Errorf("mkdir container log, err: %v", err)
+		}
+
+		logFileName := path.Join(logDir, common.ContainerLogFileName)
+		file, err := os.Create(logFileName)
+		if err != nil {
+			logrus.Errorf("create log file, err: %v", err)
+		}
+		cmd.Stdout = file
 	}
 
+	// 设置额外文件句柄
 	cmd.ExtraFiles = []*os.File{
 		readPipe,
 	}

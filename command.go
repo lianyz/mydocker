@@ -131,6 +131,19 @@ var listCommand = cli.Command{
 	},
 }
 
+var logCommand = cli.Command{
+	Name:  "logs",
+	Usage: "look container log",
+	Action: func(context *cli.Context) error {
+		if len(context.Args()) < 1 {
+			return fmt.Errorf("missing container name")
+		}
+		containerName := context.Args().Get(0)
+		container.LookContainerLog(containerName)
+		return nil
+	},
+}
+
 var execCommand = cli.Command{
 	Name:  "exec",
 	Usage: "exec a command into container",

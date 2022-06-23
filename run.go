@@ -18,7 +18,7 @@ import (
 
 func Run(cmdArray []string, tty bool, asChild bool,
 	res *subsystem.ResourceConfig, volume, containerName string) {
-	parent, writePipe := container.NewParentProcess(tty, asChild, volume)
+	parent, writePipe := container.NewParentProcess(tty, asChild, volume, containerName)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
 		return
