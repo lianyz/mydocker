@@ -135,10 +135,11 @@ var logCommand = cli.Command{
 	Name:  "logs",
 	Usage: "look container log",
 	Action: func(context *cli.Context) error {
-		if len(context.Args()) < 1 {
-			return fmt.Errorf("missing container name")
+		containerName, err := getContainerName(context)
+		if err != nil {
+			return err
 		}
-		containerName := context.Args().Get(0)
+
 		container.LookContainerLog(containerName)
 		return nil
 	},
@@ -174,11 +175,33 @@ var stopCommand = cli.Command{
 	Name:  "stop",
 	Usage: "stop a container",
 	Action: func(context *cli.Context) error {
-		if len(context.Args()) < 1 {
-			return fmt.Errorf("missing stop container name")
+		containerName, err := getContainerName(context)
+		if err != nil {
+			return err
 		}
-		containerName := context.Args().Get(0)
+
 		container.StopContainer(containerName)
 		return nil
 	},
+}
+
+var removeCommand = cli.Command{
+	Name:  "rm",
+	Usage: "remove a container",
+	Action: func(context *cli.Context) error {
+		containerName, err := getContainerName(context)
+		if err != nil {
+			return err
+		}
+
+		container.RemoveContainer(containerName)
+		return nil
+	},
+}
+
+func getContainerName(context *cli.Context) (string, error) {
+	if len(context.Args()) < 1 {
+		return "", fmt.Errorf("missing stop container name")
+	}
+	return context.Args().Get(0), nil
 }
