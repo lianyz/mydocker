@@ -77,8 +77,9 @@ var runCommand = cli.Command{
 		}
 
 		// cmdArray 为容器运行后，执行的第一个命令信息
+		// cmdArray[0] 为镜像名，.Tail()是去掉第一个后的全部参数
 		var cmdArray []string
-		for _, arg := range context.Args() {
+		for _, arg := range context.Args().Tail() {
 			cmdArray = append(cmdArray, arg)
 		}
 		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName, imageName)
