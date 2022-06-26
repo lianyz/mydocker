@@ -55,7 +55,7 @@ func createReadOnlyLayer(imageName string) error {
 	// 解压 /root/imageName.tar
 	imageTarPath := path.Join(common.RootPath, fmt.Sprintf("%s.tar", imageName))
 	if _, err := exec.Command("tar", "-xvf", imageTarPath, "-C", imageTarPath).CombinedOutput(); err != nil {
-		logrus.Errorf("tar image tar, err: %v", err)
+		logrus.Errorf("tar image tar, path: %s, err: %v", imageTarPath, err)
 		return err
 	}
 
