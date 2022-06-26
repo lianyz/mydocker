@@ -9,7 +9,6 @@ package main
 import (
 	"github.com/lianyz/mydocker/cgroups"
 	"github.com/lianyz/mydocker/cgroups/subsystem"
-	"github.com/lianyz/mydocker/common"
 	"github.com/lianyz/mydocker/container"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -17,8 +16,8 @@ import (
 )
 
 func Run(cmdArray []string, tty bool, asChild bool,
-	res *subsystem.ResourceConfig, volume, containerName string) {
-	parent, writePipe := container.NewParentProcess(tty, asChild, volume, containerName)
+	res *subsystem.ResourceConfig, volume, containerName, imageName string) {
+	parent, writePipe := container.NewParentProcess(tty, asChild, volume, containerName, imageName)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
 		return
@@ -58,7 +57,7 @@ func Run(cmdArray []string, tty bool, asChild bool,
 		}
 
 		// 删除容器工作空间
-		err = container.DeleteWorkSpace(common.RootPath, common.MntPath, volume)
+		err = container.DeleteWorkSpace(containerName, volume)
 		if err != nil {
 			logrus.Errorf("delete work space, err: %v", err)
 		}

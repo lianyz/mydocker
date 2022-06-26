@@ -66,8 +66,10 @@ var runCommand = cli.Command{
 		asChild := context.Bool("ch")
 		volume := context.String("v")
 		containerName := context.String("name")
-
 		logrus.Infof("args tty:%v aschild:%v", tty, asChild)
+
+		// 要运行的镜像名
+		imageName := context.Args().Get(0)
 		resourceConfig := &subsystem.ResourceConfig{
 			MemoryLimit: context.String("m"),
 			CpuSet:      context.String("cpuset"),
@@ -79,7 +81,7 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args() {
 			cmdArray = append(cmdArray, arg)
 		}
-		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName)
+		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName, imageName)
 		return nil
 	},
 }
@@ -105,20 +107,14 @@ var initCommand = cli.Command{
 var commitCommand = cli.Command{
 	Name:  "commit",
 	Usage: "docker commit a container into image",
-	Flags: []cli.Flag{
-		cli.StringFlag{
-			Name:  "c",
-			Usage: "export image path",
-		},
-	},
 	Action: func(context *cli.Context) error {
-		if len(context.Args()) < 1 {
-			return fmt.Errorf("missing container name")
+		if len(context.Args()) < 2 {
+			return fmt.Errorf("missing container name and image name")
 		}
 
-		imageName := context.Args().Get(0)
-		imagePath := context.String("c")
-		return container.CommitContainer(imageName, imagePath)
+		containerName := context.Args().Get(0)
+		imageName := context.Args().Get(1)
+		return container.CommitContainer(containerName, imageName)
 	},
 }
 

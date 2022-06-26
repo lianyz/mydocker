@@ -14,13 +14,12 @@ import (
 	"path"
 )
 
-func CommitContainer(imageName, imagePath string) error {
-	if imagePath == "" {
-		imagePath = common.RootPath
-	}
+func CommitContainer(containerName, imageName string) error {
 
-	imageTar := path.Join(imagePath, fmt.Sprintf("%s.tar", imageName))
-	_, err := exec.Command("tar", "-czf", imageTar, "-C", common.MntPath, ".").CombinedOutput();
+	mntPath := path.Join(common.MntPath, containerName)
+
+	imageTar := path.Join("", fmt.Sprintf("%s.tar", imageName))
+	_, err := exec.Command("tar", "-czf", imageTar, "-C", mntPath, ".").CombinedOutput()
 	if err != nil {
 		logrus.Errorf("tar container image, file name:%s, err: %v", imageTar, err)
 		return err
