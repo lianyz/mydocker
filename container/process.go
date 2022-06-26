@@ -16,7 +16,8 @@ import (
 )
 
 // NewParentProcess 创建一个会隔离namespace进程的Command
-func NewParentProcess(tty bool, asChild bool, volume, containerName, imageName string) (*exec.Cmd, *os.File) {
+func NewParentProcess(tty bool, asChild bool,
+	volume, containerName, imageName string, envs []string) (*exec.Cmd, *os.File) {
 	readPipe, writePipe, _ := os.Pipe()
 
 	// 调用自身，传入init参数，也就是执行initCommand
@@ -58,6 +59,9 @@ func NewParentProcess(tty bool, asChild bool, volume, containerName, imageName s
 	cmd.ExtraFiles = []*os.File{
 		readPipe,
 	}
+
+	// 设置环境变量
+	cmd.Env = append(os.Environ(), envs...)
 
 	err := NewWorkSpace(volume, containerName, imageName)
 	if err != nil {

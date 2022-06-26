@@ -52,6 +52,10 @@ var runCommand = cli.Command{
 			Name:  "name",
 			Usage: "docker name",
 		},
+		cli.StringSliceFlag{
+			Name:  "e",
+			Usage: "docker env",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
@@ -82,7 +86,9 @@ var runCommand = cli.Command{
 		for _, arg := range context.Args().Tail() {
 			cmdArray = append(cmdArray, arg)
 		}
-		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName, imageName)
+
+		envs := context.StringSlice("e")
+		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName, imageName, envs)
 		return nil
 	},
 }
