@@ -67,7 +67,7 @@ func NewParentProcess(tty bool, asChild bool, volume, containerName, imageName s
 	logrus.Infof("change workdir, new:%s, old:%s", common.MntPath, cmd.Dir)
 
 	// 指定容器初始化后的工作目录
-	cmd.Dir = common.MntPath
+	cmd.Dir = path.Join(common.MntPath, containerName)
 
 	return cmd, writePipe
 }
