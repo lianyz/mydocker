@@ -11,6 +11,7 @@ import (
 	"github.com/lianyz/mydocker/cgroups/subsystem"
 	"github.com/lianyz/mydocker/common"
 	"github.com/lianyz/mydocker/container"
+	"github.com/lianyz/mydocker/network"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
@@ -56,6 +57,14 @@ var runCommand = cli.Command{
 			Name:  "e",
 			Usage: "docker env",
 		},
+		cli.StringFlag{
+			Name:  "net",
+			Usage: "container network",
+		},
+		cli.StringSliceFlag{
+			Name:  "p",
+			Usage: "port mapping",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
@@ -88,7 +97,10 @@ var runCommand = cli.Command{
 		}
 
 		envs := context.StringSlice("e")
-		Run(cmdArray, tty, asChild, resourceConfig, volume, containerName, imageName, envs)
+		net := context.String("net")
+		ports := context.StringSlice("p")
+		Run(cmdArray, tty, asChild, resourceConfig,
+			volume, containerName, imageName, net, envs, ports)
 		return nil
 	},
 }
@@ -207,4 +219,46 @@ func getContainerName(context *cli.Context) (string, error) {
 		return "", fmt.Errorf("missing stop container name")
 	}
 	return context.Args().Get(0), nil
+}
+
+var networkCommand = cli.Command{
+	Name:  "network",
+	Usage: "container network commands",
+	Subcommands: []cli.Command{
+		{
+			Name:  "create",
+			Usage: "create a container network",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "driver",
+					Usage: "network driver",
+				},
+				cli.StringFlag{
+					Name:  "subnet",
+					Usage: "subnet cidr",
+				},
+			},
+			Action: func(ctx *cli.Context) error {
+				if len(ctx.Args()) < 1 {
+					return fmt.Errorf("missing network name")
+				}
+
+				err := network.Init()
+				if err != nil {
+					logrus.Errorf("network init failed, err: %v", err)
+					return err
+				}
+
+				// 创建网络
+				driver := ctx.String("driver")
+				subnet := ctx.String("subnet")
+				name := ctx.Args().Get(0)
+				err = network.CreateNetwork(driver, subnet, name)
+				if err != nil {
+					return fmt.Errorf("create network error: %+v", err)
+				}
+				return nil
+			},
+		},
+	},
 }

@@ -10,13 +10,16 @@ import (
 	"github.com/lianyz/mydocker/cgroups"
 	"github.com/lianyz/mydocker/cgroups/subsystem"
 	"github.com/lianyz/mydocker/container"
+	"github.com/lianyz/mydocker/network"
 	"github.com/sirupsen/logrus"
 	"os"
+	"strconv"
 	"strings"
 )
 
-func Run(cmdArray []string, tty bool, asChild bool,
-	res *subsystem.ResourceConfig, volume, containerName, imageName string, envs []string) {
+func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfig,
+	volume, containerName, imageName, net string,
+	envs, ports []string) {
 	parent, writePipe := container.NewParentProcess(tty, asChild, volume, containerName, imageName, envs)
 	if parent == nil {
 		logrus.Errorf("failed to new parent process")
@@ -48,6 +51,16 @@ func Run(cmdArray []string, tty bool, asChild bool,
 	// 将容器进程加入到各个subsystem挂载对应的cgroup中
 	cgroupManager.Apply(parent.Process.Pid)
 
+	// 设置网络
+	containerInfo := &container.ContainerInfo{
+		Id:          containerID,
+		Pid:         strconv.Itoa(parent.Process.Pid),
+		Name:        containerName,
+		PortMapping: ports,
+	}
+	setNetwork(net, containerInfo)
+
+	// 设置初始化命令
 	sendInitCommand(cmdArray, writePipe)
 
 	if tty {
@@ -72,6 +85,23 @@ func Run(cmdArray []string, tty bool, asChild bool,
 	}
 
 	logrus.Infof("run finished")
+}
+
+func setNetwork(net string, containerInfo *container.ContainerInfo) {
+	if net == "" {
+		return
+	}
+
+	err := network.Init()
+	if err != nil {
+		logrus.Errorf("network init failed, err: %v", err)
+		return
+	}
+
+	if err := network.Connect(net, containerInfo); err != nil {
+		logrus.Errorf("connect network, err: %v", err)
+		return
+	}
 }
 
 func sendInitCommand(cmdArray []string, writePipe *os.File) {
