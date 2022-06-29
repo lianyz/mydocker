@@ -49,7 +49,8 @@ type NetworkDriver interface {
 
 // Init 初始化网络驱动
 func Init() error {
-
+	var bridgeDriver = BridgeNetworkDriver{}
+	drivers[bridgeDriver.Name()] = &bridgeDriver
 	// todo
 
 	return nil
