@@ -21,31 +21,7 @@ type BridgeNetworkDriver struct {
 }
 
 func (d *BridgeNetworkDriver) Name() string {
-
-	// todo
-
 	return "bridge"
-}
-
-func (d *BridgeNetworkDriver) Delete(network Network) error {
-
-	// todo
-
-	return nil
-}
-
-func (d *BridgeNetworkDriver) Connect(network *Network, endpoint *Endpoint) error {
-
-	// todo
-
-	return nil
-}
-
-func (d *BridgeNetworkDriver) Disconnect(network Network, endpoint *Endpoint) error {
-
-	// todo
-
-	return nil
 }
 
 func (d *BridgeNetworkDriver) Create(subnet, name string) (*Network, error) {
@@ -63,6 +39,48 @@ func (d *BridgeNetworkDriver) Create(subnet, name string) (*Network, error) {
 	}
 
 	return n, err
+}
+
+func (d *BridgeNetworkDriver) Delete(network Network) error {
+	bridgeName := network.Name
+	br, err := netlink.LinkByName(bridgeName)
+	if err != nil {
+		return err
+	}
+	return netlink.LinkDel(br)
+}
+
+func (d *BridgeNetworkDriver) Connect(network *Network, endpoint *Endpoint) error {
+	bridgeName := network.Name
+	br, err := netlink.LinkByName(bridgeName)
+	if err != nil {
+		return err
+	}
+
+	la := netlink.NewLinkAttrs()
+	la.Name = endpoint.ID[:5]
+	la.MasterIndex = br.Attrs().Index
+
+	endpoint.Device = netlink.Veth{
+		LinkAttrs: la,
+		PeerName:  "cif-" + endpoint.ID[:5],
+	}
+
+	if err = netlink.LinkAdd(&endpoint.Device); err != nil {
+		logrus.Errorf("add endpoint device, err: %v", err)
+		return err
+	}
+
+	if err = netlink.LinkSetUp(&endpoint.Device); err != nil {
+		logrus.Errorf("setup endpoint device: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func (d *BridgeNetworkDriver) Disconnect(network Network, endpoint *Endpoint) error {
+	return nil
 }
 
 func (d *BridgeNetworkDriver) initBridge(n *Network) error {
