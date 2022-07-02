@@ -54,6 +54,6 @@ commit:
 
 .PHONY: test
 test:
-	memtester 100M 1
+	go test
 
 
