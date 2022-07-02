@@ -38,7 +38,7 @@ func TestNetworkConnect(t *testing.T) {
 	}
 
 	d := BridgeNetworkDriver{}
-	n, err := d.Create("192.168.0.1/24", "test-bridge")
+	n, err := d.Create("192.168.0.1/24", "test-bridge2")
 	t.Logf("err: %v", n)
 
 	networks[n.Name] = n
@@ -54,5 +54,3 @@ func TestLoad(t *testing.T) {
 	n.load("/var/run/mydocker/network/network/test-bridge")
 	t.Logf("network: %v", n)
 }
-
-
