@@ -69,3 +69,7 @@ func CreateNetwork(driver, subnet, name string) error {
 
 	return nil
 }
+
+func (network *Network) load(dumpPath string) error {
+	return nil
+}

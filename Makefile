@@ -54,6 +54,6 @@ commit:
 
 .PHONY: test
 test:
-	go test
+	go test ./network
 
 
