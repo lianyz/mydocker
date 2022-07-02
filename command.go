@@ -167,7 +167,7 @@ var execCommand = cli.Command{
 		// 如果环境变量里面有PID，则什么都不执行
 		pid := os.Getenv(common.EnvExecPid)
 		if pid != "" {
-			logrus.Info("pid callback pid %s, gid: %d", pid, os.Getgid())
+			logrus.Infof("pid callback pid %s, gid: %d", pid, os.Getgid())
 			return nil
 		}
 
