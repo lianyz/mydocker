@@ -34,6 +34,11 @@ const (
 	EnvExecCmd = "docker_cmd"
 )
 
+const (
+	DefaultNetworkPath   = "/var/run/mydocker/network/network/"
+	DefaultAllocatorPath = "/var/run/mydocker/network/ipam/subnet.json"
+)
+
 func Mkdir(path string) error {
 	if IsNotExist(path) {
 		return os.MkdirAll(path, os.ModePerm)
