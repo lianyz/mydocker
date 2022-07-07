@@ -138,7 +138,7 @@ func (ipam *IPAM) Release(subnet *net.IPNet, ipaddr *net.IP) error {
 	ipalloc[c] = '0'
 	(*ipam.Subnets)[subnet.String()] = string(ipalloc)
 
-	err = ipam.dump();
+	err = ipam.dump()
 	if err != nil {
 		logrus.Errorf("release ip, dump ipam info, err: %v", err)
 		return err
