@@ -118,8 +118,7 @@ func CreateNetwork(driverName, subnet, name string) error {
 	logrus.Infof("dirvers: %v ipNet: %v driver: %v", drivers, ipNet, driverName)
 	driver := drivers[driverName]
 	if driver == nil {
-		err := fmt.Errorf("can not find driver: %s", driverName)
-		logrus.Errorf("find driver, err: %v", err)
+		err := fmt.Errorf("can not find driver %s", driverName)
 		return err
 	}
 	nw, err := drivers[driverName].Create(ipNet.String(), name)
