@@ -100,7 +100,7 @@ func Init() error {
 	return nil
 }
 
-func CreateNetwork(driver, subnet, name string) error {
+func CreateNetwork(driverName, subnet, name string) error {
 	_, ipNet, err := net.ParseCIDR(subnet)
 	if err != nil {
 		logrus.Errorf("parse cidr, err: %v", err)
@@ -115,8 +115,14 @@ func CreateNetwork(driver, subnet, name string) error {
 	ipNet.IP = ip
 
 	// 创建网络
-	logrus.Infof("dirvers: %v ipNet: %v driver: %v", drivers, ipNet, driver)
-	nw, err := drivers[driver].Create(ipNet.String(), name)
+	logrus.Infof("dirvers: %v ipNet: %v driver: %v", drivers, ipNet, driverName)
+	driver := drivers[driverName]
+	if driver == nil {
+		err := fmt.Errorf("can not find driver: %s", driverName)
+		logrus.Errorf("find driver, err: %v", err)
+		return err
+	}
+	nw, err := drivers[driverName].Create(ipNet.String(), name)
 	if err != nil {
 		return err
 	}
