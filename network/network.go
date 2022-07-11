@@ -101,6 +101,9 @@ func Init() error {
 }
 
 func CreateNetwork(driverName, subnet, name string) error {
+
+	logrus.Infof("create network %s dirver: %s subnet:%s", name, driverName, subnet)
+
 	_, ipNet, err := net.ParseCIDR(subnet)
 	if err != nil {
 		logrus.Errorf("parse cidr, err: %v", err)
