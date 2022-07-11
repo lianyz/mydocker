@@ -74,7 +74,6 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 	err = ipam.load()
 	if err != nil {
 		logrus.Errorf("load allocation info, err: %v", err)
-		return nil, err
 	}
 
 	_, subnet, err = net.ParseCIDR(subnet.String())
