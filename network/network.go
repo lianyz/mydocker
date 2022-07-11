@@ -110,6 +110,8 @@ func CreateNetwork(driverName, subnet, name string) error {
 		return err
 	}
 
+	logrus.Infof("create network ipNet: %v subnet: %s", ipNet, subnet)
+
 	// 分配一个IP地址
 	ip, err := ipAllocator.Allocate(ipNet)
 	if err != nil {
