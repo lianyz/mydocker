@@ -111,9 +111,7 @@ func CreateNetwork(driver, subnet, name string) error {
 	ip, err := ipAllocator.Allocate(ipNet)
 	if err != nil {
 		logrus.Errorf("allocate ip, err: %v", err)
-		return err
 	}
-
 	ipNet.IP = ip
 
 	// 创建网络

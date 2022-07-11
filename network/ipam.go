@@ -26,7 +26,7 @@ var ipAllocator = &IPAM{
 	SubnetAllocatorPath: common.DefaultAllocatorPath,
 }
 
-// load 从文件里家在对象信息
+// load 从文件里加载对象信息
 func (ipam *IPAM) load() error {
 	if _, err := os.Stat(ipam.SubnetAllocatorPath); err != nil {
 		return err
@@ -70,7 +70,7 @@ func (ipam *IPAM) dump() error {
 func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 	// 存放网段中地址分配信息的数组
 	ipam.Subnets = &map[string]string{}
-	// 从文件中家在已经分配的网段信息
+	// 从文件中加载已经分配的网段信息
 	err = ipam.load()
 	if err != nil {
 		logrus.Errorf("load allocation info, err: %v", err)
