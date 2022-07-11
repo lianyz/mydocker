@@ -119,6 +119,8 @@ func CreateNetwork(driverName, subnet, name string) error {
 	}
 	ipNet.IP = ip
 
+	logrus.Infof("create network ip: %v", ip)
+
 	// 创建网络
 	logrus.Infof("dirvers: %v ipNet: %v driver: %v", drivers, ipNet, driverName)
 	driver := drivers[driverName]
