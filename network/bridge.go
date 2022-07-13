@@ -24,7 +24,7 @@ func (d *BridgeNetworkDriver) Name() string {
 	return "bridge"
 }
 
-func (d *BridgeNetworkDriver) Create(subnet, name string) (*Network, error) {
+func (d *BridgeNetworkDriver) Create(subnet string, gatewayIp net.IP, name string) (*Network, error) {
 	ip, ipRange, _ := net.ParseCIDR(subnet)
 	ipRange.IP = ip
 	n := &Network{
@@ -32,7 +32,7 @@ func (d *BridgeNetworkDriver) Create(subnet, name string) (*Network, error) {
 		IpRange: ipRange,
 		Driver:  d.Name(),
 	}
-	err := d.initBridge(n)
+	err := d.initBridge(n, gatewayIp)
 	if err != nil {
 		logrus.Errorf("error init bridge: %v", err)
 		return nil, err
@@ -83,7 +83,7 @@ func (d *BridgeNetworkDriver) Disconnect(network Network, endpoint *Endpoint) er
 	return nil
 }
 
-func (d *BridgeNetworkDriver) initBridge(n *Network) error {
+func (d *BridgeNetworkDriver) initBridge(n *Network, gatewayIp net.IP) error {
 	bridgeName := n.Name
 	if err := createBridgeInterface(bridgeName); err != nil {
 		logrus.Errorf("add bridge: %s, err: %v", bridgeName, err)
@@ -91,7 +91,7 @@ func (d *BridgeNetworkDriver) initBridge(n *Network) error {
 	}
 
 	gatewayIP := *n.IpRange
-	gatewayIP.IP = n.IpRange.IP
+	gatewayIP.IP = gatewayIp
 
 	if err := setInterfaceIP(bridgeName, gatewayIP.String()); err != nil {
 		logrus.Errorf("assigning address: %s on bridge: %s with an error: %v",
