@@ -100,7 +100,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 			ip = subnet.IP
 
 			for t := uint(4); t > 0; t -= 1 {
-				[]byte(ip)[4-t] += uint8(c >> (t - 1) * 8)
+				[]byte(ip)[4-t] += uint8(c >> ((t - 1) * 8))
 			}
 			ip[3] += 1
 			break
