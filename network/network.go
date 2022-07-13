@@ -112,14 +112,14 @@ func CreateNetwork(driverName, subnet, name string) error {
 
 	logrus.Infof("create network ipNet: %v subnet: %s", ipNet, subnet)
 
-	// 分配一个IP地址
-	ip, err := ipAllocator.Allocate(ipNet)
+	// 通过IPAM分配网关IP，获取到网段中的第一个IP作为网关的IP
+	gatewayIp, err := ipAllocator.Allocate(ipNet)
 	if err != nil {
 		logrus.Errorf("allocate ip, err: %v", err)
 	}
-	ipNet.IP = ip
+	ipNet.IP = gatewayIp
 
-	logrus.Infof("create network ip: %v", ip)
+	logrus.Infof("create network, ipNet: %v getwayIp: %v", ipNet, gatewayIp)
 
 	// 创建网络
 	logrus.Infof("dirvers: %v ipNet: %v driver: %v", drivers, ipNet, driverName)
