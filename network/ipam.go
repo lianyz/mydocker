@@ -87,6 +87,8 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 		(*ipam.Subnets)[subnet.String()] = strings.Repeat("0", 1<<uint8(size-one))
 	}
 
+	logrus.Infof("ipam subnet: %v", subnet)
+
 	for c := range (*ipam.Subnets)[subnet.String()] {
 		if (*ipam.Subnets)[subnet.String()][c] == '0' {
 			ipalloc := []byte((*ipam.Subnets)[subnet.String()])
