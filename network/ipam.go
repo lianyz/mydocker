@@ -88,6 +88,8 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 
 	one, size := subnet.Mask.Size()
 
+	logrus.Infof("mask info: maks: %v one: %v size: %v", subnet.Mask, one, size)
+
 	if _, exist := (*ipam.Subnets)[subnet.String()]; !exist {
 		(*ipam.Subnets)[subnet.String()] = strings.Repeat("0", 1<<uint8(size-one))
 	}
