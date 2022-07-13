@@ -29,10 +29,15 @@ var ipAllocator = &IPAM{
 // load 从文件里加载对象信息
 func (ipam *IPAM) load() error {
 	if _, err := os.Stat(ipam.SubnetAllocatorPath); err != nil {
-		return err
+		if os.IsNotExist(err) {
+			return nil
+		} else {
+			return err
+		}
 	}
 
 	file, err := os.Open(ipam.SubnetAllocatorPath)
+	defer file.Close()
 	if err != nil {
 		return err
 	}
