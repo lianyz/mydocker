@@ -99,7 +99,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 			(*ipam.Subnets)[subnet.String()] = string(ipalloc)
 			ip = subnet.IP
 
-			logrus.Infof("allocate ip: %v subnet.IP: %v", ip, subnet.IP)
+			logrus.Infof("allocate ip c: %v ip: %v subnet.IP: %v", c, ip, subnet.IP)
 
 			for t := uint(4); t > 0; t -= 1 {
 				before := []byte(ip)[4-t]
