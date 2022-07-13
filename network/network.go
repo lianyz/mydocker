@@ -349,11 +349,6 @@ func (n *Network) load(dumpPath string) error {
 		return err
 	}
 
-	ipBytes := []byte(n.IpRange.IP)
-	for i := 0; i < len(ipBytes); i++ {
-		logrus.Infof("network load ip[%d]: %d", i, ipBytes[i])
-	}
-
 	n.IpRange = toIPv4(n.IpRange)
 
 	return nil
