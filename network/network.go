@@ -148,6 +148,9 @@ func AllocateIP(networkName string) error {
 		return fmt.Errorf("no such network: %s", networkName)
 	}
 
+	logrus.Infof("network: name: %s ipRange: %v driver: %v",
+		network.Name, network.IpRange, network.Driver)
+
 	// 分配容器IP地址
 	ip, err := ipAllocator.Allocate(network.IpRange)
 	if err != nil {
