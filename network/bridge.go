@@ -93,6 +93,8 @@ func (d *BridgeNetworkDriver) initBridge(n *Network, gatewayIp net.IP) error {
 	gatewayIP := *n.IpRange
 	gatewayIP.IP = gatewayIp
 
+	logrus.Infof("init bridge ipNet:%v gatewayIP:%v", n.IpRange, gatewayIp)
+
 	if err := setInterfaceIP(bridgeName, gatewayIP.String()); err != nil {
 		logrus.Errorf("assigning address: %s on bridge: %s with an error: %v",
 			gatewayIP, bridgeName, err)
