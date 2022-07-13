@@ -90,7 +90,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 		(*ipam.Subnets)[subnet.String()] = strings.Repeat("0", 1<<uint8(size-one))
 	}
 
-	logrus.Infof("ipam subnet: %v", subnet)
+	logrus.Infof("allocate ipam subnet: %v", subnet)
 
 	for c := range (*ipam.Subnets)[subnet.String()] {
 		if (*ipam.Subnets)[subnet.String()][c] == '0' {
@@ -100,12 +100,18 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 			ip = subnet.IP
 
 			for t := uint(4); t > 0; t -= 1 {
+				before := []byte(ip)[4-t]
 				[]byte(ip)[4-t] += uint8(c >> ((t - 1) * 8))
+				after := []byte(ip)[4-t]
+
+				logrus.Infof("allocate ip[%d] %d->%d", t, before, after)
 			}
 			ip[3] += 1
 			break
 		}
 	}
+
+	logrus.Infof("allocate ip: %v", ip)
 
 	err = ipam.dump()
 	if err != nil {
