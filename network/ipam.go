@@ -103,7 +103,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 
 			ipBytes := []byte(ip)
 			for i := 0; i < len(ipBytes); i++ {
-				logrus.Infof("ip[%d]: %d", i, []byte(ip)[i])
+				logrus.Infof("ip[%d]: %d", i, ipBytes[i])
 			}
 
 			for t := uint(4); t > 0; t -= 1 {

@@ -340,15 +340,20 @@ func (n *Network) load(dumpPath string) error {
 	defer nwConfigFile.Close()
 
 	nwJson := make([]byte, 2000)
-	len, err := nwConfigFile.Read(nwJson)
+	length, err := nwConfigFile.Read(nwJson)
 	if err != nil {
 		return err
 	}
 
-	err = json.Unmarshal(nwJson[:len], n)
+	err = json.Unmarshal(nwJson[:length], n)
 	if err != nil {
 		logrus.Errorf("json unmarshal nw info, err: %v", err)
 		return err
+	}
+
+	ipBytes := []byte(n.IpRange.IP)
+	for i := 0; i < len(ipBytes); i++ {
+		logrus.Infof("network load ip[%d]: %d", i, ipBytes[i])
 	}
 
 	return nil
