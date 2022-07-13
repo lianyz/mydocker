@@ -104,7 +104,8 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 				[]byte(ip)[4-t] += uint8(c >> ((t - 1) * 8))
 				after := []byte(ip)[4-t]
 
-				logrus.Infof("allocate ip[%d] %d-%d", t, before, after)
+				logrus.Infof("allocate ip[%d] %d-%d delta: %d",
+					t, before, after, uint8(c>>((t-1)*8)))
 			}
 			ip[3] += 1
 			break
