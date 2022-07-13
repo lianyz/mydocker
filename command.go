@@ -268,8 +268,14 @@ var networkCommand = cli.Command{
 					return fmt.Errorf("missing network name")
 				}
 
+				err := network.Init()
+				if err != nil {
+					logrus.Errorf("network init failed, err: %v", err)
+					return err
+				}
+
 				name := ctx.Args().Get(0)
-				err := network.AllocateIP(name)
+				err = network.AllocateIP(name)
 				if err != nil {
 					return fmt.Errorf("allocate ip error: %+v", err)
 				}
