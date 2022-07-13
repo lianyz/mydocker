@@ -151,10 +151,8 @@ func AllocateIP(networkName string) error {
 	logrus.Infof("network: name: %s ipRange: %v driver: %v",
 		network.Name, network.IpRange, network.Driver)
 
-	_, ipNet, err := net.ParseCIDR(network.IpRange.String())
-
 	// 分配容器IP地址,输入参数不能直接用network.IpRange，否则输出的ip地址为v6格式
-	ip, err := ipAllocator.Allocate(ipNet)
+	ip, err := ipAllocator.Allocate(network.IpRange)
 	if err != nil {
 		return err
 	}
@@ -356,7 +354,14 @@ func (n *Network) load(dumpPath string) error {
 		logrus.Infof("network load ip[%d]: %d", i, ipBytes[i])
 	}
 
+	n.IpRange = toIPv4(n.IpRange)
+
 	return nil
+}
+
+func toIPv4(ipRange *net.IPNet) *net.IPNet {
+	_, ipNet, _ := net.ParseCIDR(ipRange.String())
+	return ipNet
 }
 
 func (n *Network) dump(dumpPath string) error {
