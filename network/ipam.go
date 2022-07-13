@@ -81,14 +81,10 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 		logrus.Errorf("load allocation info, err: %v", err)
 	}
 
-	_, subnet, err = net.ParseCIDR(subnet.String())
-	if err != nil {
-		return nil, err
-	}
-
 	one, size := subnet.Mask.Size()
 
-	logrus.Infof("mask info: maks: %v one: %v size: %v", subnet.Mask, one, size)
+	logrus.Infof("allocate info: subnet: %v mask: %v one: %v size: %v",
+		subnet, subnet.Mask, one, size)
 
 	if _, exist := (*ipam.Subnets)[subnet.String()]; !exist {
 		(*ipam.Subnets)[subnet.String()] = strings.Repeat("0", 1<<uint8(size-one))
