@@ -143,10 +143,26 @@ func CreateNetwork(driverName, subnet, name string) error {
 	return nil
 }
 
+func AllocateIP(networkName string) error {
+	network, ok := networks[networkName]
+	if !ok {
+		return fmt.Errorf("no such network: %s", networkName)
+	}
+
+	// 分配容器IP地址
+	ip, err := ipAllocator.Allocate(network.IpRange)
+	if err != nil {
+		return err
+	}
+
+	logrus.Infof("allocate ip succeed. ip addr: %v", ip)
+	return nil
+}
+
 func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 	network, ok := networks[networkName]
 	if !ok {
-		return fmt.Errorf("no sucn network: %s", networkName)
+		return fmt.Errorf("no such network: %s", networkName)
 	}
 
 	// 分配容器IP地址

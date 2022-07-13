@@ -260,5 +260,21 @@ var networkCommand = cli.Command{
 				return nil
 			},
 		},
+		{
+			Name:  "alloc",
+			Usage: "allocate a ip address from network",
+			Action: func(ctx *cli.Context) error {
+				if len(ctx.Args()) < 1 {
+					return fmt.Errorf("missing network name")
+				}
+
+				name := ctx.Args().Get(0)
+				err := network.AllocateIP(name)
+				if err != nil {
+					return fmt.Errorf("allocate ip error: %+v", err)
+				}
+				return nil
+			},
+		},
 	},
 }
