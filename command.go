@@ -275,6 +275,28 @@ var networkCommand = cli.Command{
 			},
 		},
 		{
+			Name:  "remove",
+			Usage: "remove container network",
+			Action: func(ctx *cli.Context) error {
+				if len(ctx.Args()) < 1 {
+					return fmt.Errorf("missing network name")
+				}
+
+				err := network.Init()
+				if err != nil {
+					logrus.Errorf("network init failed, err: %v", err)
+					return err
+				}
+
+				err = network.DeleteNetwork(ctx.Args().Get(0))
+				if err != nil {
+					return fmt.Errorf("remove network error: %+v", err)
+				}
+
+				return nil
+			},
+		},
+		{
 			Name:  "alloc",
 			Usage: "allocate a ip address from network",
 			Action: func(ctx *cli.Context) error {
