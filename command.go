@@ -261,6 +261,20 @@ var networkCommand = cli.Command{
 			},
 		},
 		{
+			Name:  "list",
+			Usage: "list container network",
+			Action: func(ctx *cli.Context) error {
+				err := network.Init()
+				if err != nil {
+					logrus.Errorf("network init failed, err: %v", err)
+					return err
+				}
+
+				network.ListNetwork()
+				return nil
+			},
+		},
+		{
 			Name:  "alloc",
 			Usage: "allocate a ip address from network",
 			Action: func(ctx *cli.Context) error {
@@ -278,6 +292,28 @@ var networkCommand = cli.Command{
 				err = network.AllocateIP(name)
 				if err != nil {
 					return fmt.Errorf("allocate ip error: %+v", err)
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "release",
+			Usage: "release a ip address from network",
+			Action: func(ctx *cli.Context) error {
+				if len(ctx.Args()) < 1 {
+					return fmt.Errorf("missing network name")
+				}
+
+				err := network.Init()
+				if err != nil {
+					logrus.Errorf("network init failed, err: %v", err)
+					return err
+				}
+
+				name := ctx.Args().Get(0)
+				err = network.ReleaseIP(name)
+				if err != nil {
+					return fmt.Errorf("release ip error: %+v", err)
 				}
 				return nil
 			},

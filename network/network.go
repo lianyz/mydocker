@@ -161,6 +161,10 @@ func AllocateIP(networkName string) error {
 	return nil
 }
 
+func ReleaseIP(networkName string) error {
+	return nil
+}
+
 func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 	network, ok := networks[networkName]
 	if !ok {
