@@ -189,8 +189,8 @@ func setInterfaceUP(interfaceName string) error {
 }
 
 func setSNAT(bridgeName string, subnet *net.IPNet) error {
-	iptablesCmd := fmt.Sprintf("-t nat -A POSTROUTING -s %s ! -o %s -j MASQUERADE",
-		subnet.String(), bridgeName)
+	iptablesCmd := fmt.Sprintf("-t nat -A POSTROUTING -s %s -j MASQUERADE",
+		subnet.String())
 
 	return setupIPTables(iptablesCmd)
 }
