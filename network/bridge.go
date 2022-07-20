@@ -107,7 +107,12 @@ func (d *BridgeNetworkDriver) initBridge(n *Network, gatewayIp net.IP) error {
 		return err
 	}
 
-	if err := setupIPTables(bridgeName, n.IpRange); err != nil {
+	if err := setSNAT(bridgeName, n.IpRange); err != nil {
+		logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
+		return err
+	}
+
+	if err := setBridgeForward(bridgeName); err != nil {
 		logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
 		return err
 	}
@@ -183,9 +188,21 @@ func setInterfaceUP(interfaceName string) error {
 	return nil
 }
 
-func setupIPTables(bridgeName string, subnet *net.IPNet) error {
+func setSNAT(bridgeName string, subnet *net.IPNet) error {
 	iptablesCmd := fmt.Sprintf("-t nat -A POSTROUTING -s %s ! -o %s -j MASQUERADE",
 		subnet.String(), bridgeName)
+
+	return setupIPTables(iptablesCmd)
+}
+
+func setBridgeForward(bridgeName string) error {
+	iptablesCmd := fmt.Sprintf("-A FORWARD -i %s -j ACCEPT", bridgeName)
+
+	return setupIPTables(iptablesCmd)
+}
+
+func setupIPTables(iptablesCmd string) error {
+	logrus.Infof("iptables %s", iptablesCmd)
 	cmd := exec.Command("iptables", strings.Split(iptablesCmd, " ")...)
 	output, err := cmd.Output()
 	if err != nil {
