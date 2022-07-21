@@ -163,7 +163,6 @@ func setInterfaceIP(name string, rawIP string) error {
 
 	addr := &netlink.Addr{
 		IPNet:     ipNet,
-		Peer:      ipNet,
 		Label:     "",
 		Flags:     0,
 		Scope:     0,
