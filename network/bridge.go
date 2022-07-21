@@ -162,11 +162,10 @@ func setInterfaceIP(name string, rawIP string) error {
 	}
 
 	addr := &netlink.Addr{
-		IPNet:     ipNet,
-		Label:     "",
-		Flags:     0,
-		Scope:     0,
-		Broadcast: nil,
+		IPNet: ipNet,
+		Label: "",
+		Flags: 0,
+		Scope: 0,
 	}
 
 	return netlink.AddrAdd(link, addr)
