@@ -55,7 +55,7 @@ commit:
 
 .PHONY: net
 net:
-	./bin/mydocker network create --dirver bridge --subnet 192.168.10.1/24 testbridge
+	./bin/mydocker network create --driver bridge --subnet 192.168.10.1/24 testbridge
 
 .PHONY: d1
 d1:
