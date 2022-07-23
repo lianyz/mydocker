@@ -265,6 +265,8 @@ func configEndpointIpAddressAndRoute(ep *Endpoint, cInfo *container.ContainerInf
 
 	_, cidr, _ := net.ParseCIDR("0.0.0.0/0")
 
+	logrus.Infof("connect network, network:%v gw:%s", ep.Network, ep.Network.IpRange.IP)
+
 	defaultRoute := &netlink.Route{
 		LinkIndex: peerLink.Attrs().Index,
 		Gw:        ep.Network.IpRange.IP,
