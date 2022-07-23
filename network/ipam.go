@@ -119,7 +119,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 		}
 	}
 
-	logrus.Infof("allocate ip: %v", ip)
+	logrus.Infof("allocate ip: %v, ipRange: %v", ip, subnet)
 
 	err = ipam.dump()
 	if err != nil {

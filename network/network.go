@@ -176,7 +176,7 @@ func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 		return fmt.Errorf("no such network: %s", networkName)
 	}
 
-	logrus.Infof("connect network 1 %v", network)
+	logrus.Infof("connect network 0 %v", network)
 
 	// 分配容器IP地址
 	ip, err := ipAllocator.Allocate(network.IpRange)
@@ -184,7 +184,7 @@ func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 		return err
 	}
 
-	logrus.Infof("connect network 0 %v, container ip: %s", network, ip)
+	logrus.Infof("connect network 1 %v, container ip: %s", network, ip)
 
 	// 创建网络端点
 	ep := &Endpoint{
