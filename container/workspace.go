@@ -86,7 +86,7 @@ func createMountPoint(containerName, imageName string) error {
 	dirs := fmt.Sprintf("dirs=%s:%s", writeLayerPath, imagePath)
 	cmd := exec.Command("mount", "-t", "aufs", "-o", dirs, "none", mntPath)
 	if err := cmd.Run(); err != nil {
-		logrus.Errorf("mnt cmd run, err: %v", err)
+		logrus.Errorf("mnt cmd run, err: %v dirs:%s mntPath:%s", err, dirs, mntPath)
 		return err
 	}
 
