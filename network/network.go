@@ -176,11 +176,15 @@ func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 		return fmt.Errorf("no such network: %s", networkName)
 	}
 
+	logrus.Infof("connect network 1 %v", network)
+
 	// 分配容器IP地址
 	ip, err := ipAllocator.Allocate(network.IpRange)
 	if err != nil {
 		return err
 	}
+
+	logrus.Infof("connect network 1 %v", network)
 
 	// 创建网络端点
 	ep := &Endpoint{
@@ -366,7 +370,8 @@ func (n *Network) load(dumpPath string) error {
 }
 
 func toIPv4(ipRange *net.IPNet) *net.IPNet {
-	_, ipNet, _ := net.ParseCIDR(ipRange.String())
+	ip, ipNet, _ := net.ParseCIDR(ipRange.String())
+	ipNet.IP = ip
 	return ipNet
 }
 
