@@ -184,7 +184,7 @@ func Connect(networkName string, containerInfo *container.ContainerInfo) error {
 		return err
 	}
 
-	logrus.Infof("connect network 1 %v", network)
+	logrus.Infof("connect network 0 %v, container ip: %s", network, ip)
 
 	// 创建网络端点
 	ep := &Endpoint{
@@ -371,7 +371,7 @@ func (n *Network) load(dumpPath string) error {
 
 func toIPv4(ipRange *net.IPNet) *net.IPNet {
 	ip, ipNet, _ := net.ParseCIDR(ipRange.String())
-	ipNet.IP = ip
+	ipNet.IP = ip.To4()
 	return ipNet
 }
 
