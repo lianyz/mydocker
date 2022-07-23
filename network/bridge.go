@@ -25,7 +25,8 @@ func (d *BridgeNetworkDriver) Name() string {
 }
 
 func (d *BridgeNetworkDriver) Create(subnet string, name string) (*Network, error) {
-	_, ipRange, _ := net.ParseCIDR(subnet)
+	ip, ipRange, _ := net.ParseCIDR(subnet)
+	ipRange.IP = ip
 	n := &Network{
 		Name:    name,
 		IpRange: ipRange,
