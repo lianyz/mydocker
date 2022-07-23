@@ -83,6 +83,41 @@ func createMountPoint(containerName, imageName string) error {
 	// 将宿主机上关于容器的读写层和只读层挂载到 /root/mnt/容器名 里
 	writeLayerPath := path.Join(common.RootPath, common.WriteLayer, containerName)
 	imagePath := path.Join(common.RootPath, imageName)
+
+	return mountOverlayFS(imagePath, writeLayerPath, mntPath)
+}
+
+func mountOverlayFS(imagePath, writeLayerPath, mntPath string) error {
+	workPath := path.Join(common.RootPath, "work")
+
+	if err := createDirs(writeLayerPath, workPath); err != nil {
+		return err
+	}
+
+	dirs := fmt.Sprintf("lowerdir=%s,upperdir=%s,workdir=%s", imagePath, writeLayerPath, workPath)
+	cmd := exec.Command("mount", "-t", "overlay", "overlay", "-o", dirs, mntPath)
+	if err := cmd.Run(); err != nil {
+		logrus.Errorf("mnt cmd run, err: %v dirs:%s mntPath:%s", err, dirs, mntPath)
+		return err
+	}
+	return nil
+}
+
+func createDirs(upperPath, workPath string) error {
+	if err := common.Mkdir(upperPath); err != nil {
+		logrus.Errorf("mkdir upper path, err: %v", err)
+		return err
+	}
+
+	if err := common.Mkdir(workPath); err != nil {
+		logrus.Errorf("mkdir work path, err: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func mountAufs(imagePath, writeLayerPath, mntPath string) error {
 	dirs := fmt.Sprintf("dirs=%s:%s", writeLayerPath, imagePath)
 	cmd := exec.Command("mount", "-t", "aufs", "-o", dirs, "none", mntPath)
 	if err := cmd.Run(); err != nil {
