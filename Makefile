@@ -52,6 +52,19 @@ run.stress:
 commit:
 	./bin/mydocker commit image
 
+
+.PHONY: net
+net:
+	./bin/mydocker network create --dirver bridge --subnet 192.168.10.1/24 testbridge
+
+.PHONY: d1
+d1:
+	./bin/mydocker run -ti -net testbridge busybox sh
+
+.PHONY: d2
+d2:
+	./bin/mydocker run -ti -net testbridge busybox sh
+
 .PHONY: test
 test:
 	go test ./network
