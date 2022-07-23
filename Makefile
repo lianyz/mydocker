@@ -59,11 +59,11 @@ net:
 
 .PHONY: d1
 d1:
-	./bin/mydocker run -ti -net testbridge busybox sh
+	./bin/mydocker run -ti -net testbridge -p 82:82 busybox sh
 
 .PHONY: d2
 d2:
-	./bin/mydocker run -ti -net testbridge busybox sh
+	./bin/mydocker run -ti -net testbridge -p 84:84 busybox sh
 
 .PHONY: test
 test:
