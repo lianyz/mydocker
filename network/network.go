@@ -89,6 +89,9 @@ func Init() error {
 
 		networks[nwName] = nw
 
+		logrus.Infof("list network, name: %s, ipRange: %v, gatewayIP:%s, driver:%s",
+			nwName, nw.IpRange, nw.IpRange.IP, nw.Driver)
+
 		return nil
 	})
 
