@@ -60,6 +60,9 @@ func NewParentProcess(tty bool, asChild bool,
 		readPipe,
 	}
 
+	// 将/bin添加至环境变量
+	envs = append(envs, "PATH=$PATH:/bin")
+
 	// 设置环境变量
 	cmd.Env = append(os.Environ(), envs...)
 
