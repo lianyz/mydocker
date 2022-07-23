@@ -52,7 +52,7 @@ type NetworkDriver interface {
 	Name() string
 
 	// Create 创建网络
-	Create(subnet string, gatewayIp net.IP, name string) (*Network, error)
+	Create(subnet string, name string) (*Network, error)
 
 	// Delete 删除网络
 	Delete(network Network) error
@@ -118,6 +118,8 @@ func CreateNetwork(driverName, subnet, name string) error {
 		logrus.Errorf("allocate ip, err: %v", err)
 	}
 
+	ipNet.IP = gatewayIp
+
 	logrus.Infof("create network, ipNet: %v getwayIp: %v", ipNet, gatewayIp)
 
 	// 创建网络
@@ -127,7 +129,7 @@ func CreateNetwork(driverName, subnet, name string) error {
 		err := fmt.Errorf("can not find driver %s", driverName)
 		return err
 	}
-	nw, err := drivers[driverName].Create(ipNet.String(), gatewayIp, name)
+	nw, err := drivers[driverName].Create(ipNet.String(), name)
 	if err != nil {
 		return err
 	}
