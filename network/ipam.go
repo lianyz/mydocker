@@ -98,7 +98,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 			ipalloc[c] = '1'
 			(*ipam.Subnets)[subnet.String()] = string(ipalloc)
 			// 不能直接 ip = subnet.IP，否则对ip的更改会影响到subnet.IP
-			ip = subnet.IP
+			//ip = subnet.IP
 			//ip := make([]byte, 4)
 			//ip[0] = subnet.IP[0]
 			//ip[1] = subnet.IP[1]
@@ -107,8 +107,10 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 
 			logrus.Infof("allocate ip c: %v ip: %v subnet.IP: %v", c, ip, subnet.IP)
 
-			ipBytes := []byte(ip)
+			ipBytes := []byte(subnet.IP)
+			ip = make([]byte, len(ipBytes))
 			for i := 0; i < len(ipBytes); i++ {
+				ip[i] = ipBytes[i]
 				logrus.Infof("ip[%d]: %d", i, ipBytes[i])
 			}
 
