@@ -4,6 +4,8 @@
 ## 基本用法
 
 ```shell
+make init  # 完成初始化的准备工作
+
 make       # 编译生成 ./bin/mydocker
 make net   # 创建网络 testbridge, 网关ip为192.168.10.1
 make d1    # 创建容器1 ip地址为 192.168.10.2

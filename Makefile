@@ -33,6 +33,10 @@ tools:
 	apt install memtester
 	brew install FiloSottile/musl-cross/musl-cross
 
+.PHONY: init
+init:
+	cp ./image/busybox.tar /root/
+
 .PHONY: run
 run:
 	./bin/mydocker run -ti -ch sh
