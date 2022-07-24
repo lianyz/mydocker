@@ -16,7 +16,6 @@ import (
 	"github.com/vishvananda/netns"
 	"net"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -331,17 +330,17 @@ func configPortMapping(ep *Endpoint, cInfo *container.ContainerInfo) error {
 			continue
 		}
 
+		// External traffic
 		iptablesCmd := fmt.Sprintf("-t nat -A PREROUTING -p tcp -m tcp --dport %s -j DNAT --to-destination %s:%s",
 			portMapping[0], ep.IPAddress.String(), portMapping[1])
+		setupIPTables(iptablesCmd)
 
-		logrus.Infof("config port mapping iptable comand: iptables %s", iptablesCmd)
+		// Local traffic (since it doesn't pass the PREROUTING chain)
+		iptablesCmd = fmt.Sprintf("-t nat -A OUTPUT -p tcp -m tcp --dport %s -j DNAT --to-destination %s:%s",
+			portMapping[0], ep.IPAddress.String(), portMapping[1])
+		setupIPTables(iptablesCmd)
 
-		cmd := exec.Command("iptables", strings.Split(iptablesCmd, " ")...)
-		output, err := cmd.Output()
-		if err != nil {
-			logrus.Errorf("iptables output %v, err: %v", output, err)
-			continue
-		}
+		return nil
 	}
 
 	return nil

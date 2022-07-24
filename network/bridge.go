@@ -11,7 +11,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"
 	"net"
-	"os/exec"
 	"strings"
 	"time"
 )
@@ -198,15 +197,4 @@ func setBridgeForward(bridgeName string) error {
 	iptablesCmd := fmt.Sprintf("-A FORWARD -i %s -j ACCEPT", bridgeName)
 
 	return setupIPTables(iptablesCmd)
-}
-
-func setupIPTables(iptablesCmd string) error {
-	logrus.Infof("iptables %s", iptablesCmd)
-	cmd := exec.Command("iptables", strings.Split(iptablesCmd, " ")...)
-	output, err := cmd.Output()
-	if err != nil {
-		logrus.Errorf("iptables output: %v, err: %v", output, err)
-		return err
-	}
-	return nil
 }
