@@ -113,10 +113,10 @@ func (d *BridgeNetworkDriver) initBridge(n *Network) error {
 	}
 
 	// 如果不设置该项，在容器内部无法访问外部网络 ping 114.114.114.114
-	if err := setBridgeForward(bridgeName); err != nil {
-		logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
-		return err
-	}
+	//if err := setBridgeForward(bridgeName); err != nil {
+	//	logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
+	//	return err
+	//}
 
 	return nil
 }
