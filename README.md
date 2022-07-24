@@ -1,6 +1,10 @@
 # mydocker 自己动手实现容器
 
 
+## 编译运行环境
+1. Ubuntu 20.04
+2. CentOS Linux 8.5
+
 ## 基本用法
 
 ```shell
