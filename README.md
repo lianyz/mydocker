@@ -66,7 +66,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 cif-20813
 ```
 
-#### 原因2 主机iptables filter表中的forward规则不通过
+#### 原因2 主机iptables filter表中的forward规则检查不通过
 
 当容器1向容器2发送ping包经过bridge转发时，这个包会路过iptables中filter表的FORWORD规则链，
 该链默认的policy是DROP,如果没有显式规则去允许bridge转发的包的话，该包会被丢弃. 参考[why linux bridge doesn't work](https://superuser.com/questions/1211852/why-linux-bridge-doesnt-work).
