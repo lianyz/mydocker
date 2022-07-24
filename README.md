@@ -102,7 +102,7 @@ iptables -t nat -A OUTPUT -p tcp -m tcp --dport 81 -j DNAT --to-destination 192.
 ```
 
 ### 什么是local类型的地址
-可以参考以下链接：[WTF addrtype in iptables manpage](https://www.linuxquestions.org/questions/linux-networking-3/wtf-addrtype-in-iptables-manpage-746659/), [Docker's NAT table output chain rule](https://stackoverflow.com/questions/26963362/dockers-nat-table-output-chain-rule)
+可以参考以下链接：[WTF addrtype in iptables manpage](https://www.linuxquestions.org/questions/linux-networking-3/wtf-addrtype-in-iptables-manpage-746659/), [Docker's NAT table output chain rule](https://stackoverflow.com/questions/26963362/dockers-nat-table-output-chain-rule).
 local类型地址指的是本机的网卡所具有的地址，可以通过以下命令查看
 
 ```shell
@@ -117,8 +117,7 @@ local 192.168.34.2 dev enp0s8 proto kernel scope host src 192.168.34.2
 ```
 
 ### 如何通过进程号进入到容器的网络空间
-在主机上进入容器的网络命名空间
-16300为容器的进程ID
+在主机上进入容器的网络命名空间，容器进程的ID为16300
 
 ```shell
 nsenter -t 16300 -n ifconfig
