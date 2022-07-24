@@ -112,10 +112,10 @@ func (d *BridgeNetworkDriver) initBridge(n *Network) error {
 		return err
 	}
 
-	if err := setBridgeForward(bridgeName); err != nil {
-		logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
-		return err
-	}
+	//if err := setBridgeForward(bridgeName); err != nil {
+	//	logrus.Errorf("setting iptables for %s, err: %v", bridgeName, err)
+	//	return err
+	//}
 
 	return nil
 }
