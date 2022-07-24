@@ -69,13 +69,15 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 #### 原因2 主机iptables filter表中的forward规则检查不通过
 
 当容器1向容器2发送ping包经过bridge转发时，这个包会路过iptables中filter表的FORWORD规则链，
-该链默认的policy是DROP,如果没有显式规则去允许bridge转发的包的话，该包会被丢弃. 参考[why linux bridge doesn't work](https://superuser.com/questions/1211852/why-linux-bridge-doesnt-work).
+该链默认的policy是DROP,如果没有显式规则去允许bridge转发的包的话，该包会被丢弃. 参考链接：[why linux bridge doesn't work](https://superuser.com/questions/1211852/why-linux-bridge-doesnt-work).
 
 有如下三种解决方案，本项目中采用的是第一种解决方案
 
 1. 显示增加规则允许转发
 ```shell
+# External traffic
 iptables -t filter -A FORWARD -i testbridge -j ACCEPT
+# Local traffic (since it doesn't pass the PREROUTING chain)
 iptables -t filter -A FORWARD -o testbridge -j ACCEPT
 ```
 
@@ -100,6 +102,7 @@ iptables -t nat -A OUTPUT -p tcp -m tcp --dport 81 -j DNAT --to-destination 192.
 ```
 
 ### 什么是local类型的地址
+可以参考以下链接：[WTF addrtype in iptables manpage](https://www.linuxquestions.org/questions/linux-networking-3/wtf-addrtype-in-iptables-manpage-746659/), [Docker's NAT table output chain rule](https://stackoverflow.com/questions/26963362/dockers-nat-table-output-chain-rule)
 local类型地址指的是本机的网卡所具有的地址，可以通过以下命令查看
 
 ```shell
