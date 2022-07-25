@@ -39,6 +39,7 @@ __attribute__((constructor)) void enter_namespace(void) {
     char *namespaces[] = { "ipc", "uts", "net", "pid", "mnt" };
     for (i = 0; i < 5; i++) {
         sprintf(nspath, "/proc/%s/ns/%s", docker_pid, namespaces[i]);
+        fprintf(stdout, "[cgo]: nspath-%s\n", nspath);
         int fd = open(nspath, O_RDONLY);
         // 调用setns系统调用，进入对应的namespace
         if (setns(fd, 0) == -1) {
