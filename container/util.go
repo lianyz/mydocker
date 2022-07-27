@@ -34,5 +34,6 @@ func runProcessInsteadParent(cmdArray []string) error {
 		return err
 	}
 
+	logrus.Infof("syscall exec cmds: %v, envs: %v", cmdArray, os.Environ())
 	return syscall.Exec(path, cmdArray[0:], os.Environ())
 }
