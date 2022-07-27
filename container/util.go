@@ -28,12 +28,14 @@ func runProcessAsChild(cmdArray []string) error {
 // runProcessInsteadParent 运行进程，并替换掉父进程
 func runProcessInsteadParent(cmdArray []string) error {
 	// 在系统环境PATH中寻找命令的绝对路径
+	logrus.Infof("begin syscall exec cmds: %v, envs: %v", cmdArray, os.Environ())
+
 	path, err := exec.LookPath(cmdArray[0])
 	if err != nil {
 		logrus.Errorf("look %s path, err: %v", cmdArray[0], err)
 		return err
 	}
 
-	logrus.Infof("syscall exec cmds: %v, envs: %v", cmdArray, os.Environ())
+	logrus.Infof("end syscall exec cmds: %v, envs: %v", cmdArray, os.Environ())
 	return syscall.Exec(path, cmdArray[0:], os.Environ())
 }
