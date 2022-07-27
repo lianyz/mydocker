@@ -130,6 +130,38 @@ nsenter -t 16300 -n ifconfig
 nsenter -t 16300 -n ping 114.114.114.114
 ```
 
+### syscall.Exec语句后的log日志为什么没有输出
+exec会执行参数指定的命令，但是并不会创建新的进程，只在当前进程空间内执行，即替换当前进程的执行内容，他们
+重用同一个进程号PID，所以syscall.Exec只能是main函数的最后一条指令，它后面的代码不会被执行到。
+
+在bash中执行exec ls, exec是用被执行的明林行替换掉当前的shell进程，且exec命令后的其他命令将不再执行。
+例如在当前shell中执行exec ls，表示执行ls这条命令来替换当前的shell，即为执行完后会退出当前shell。
+
+### Linux shell脚本中，$@和$#分别是什么意思
+$@ 表示所有脚本参数的内容
+$# 表示所有脚本参数的个数
+
+例如有文件名为test.sh的脚本如下：
+
+```shell
+######################
+!/bin/sh
+echo "argc: $#"
+echo "argv: $@"
+######################
+```
+
+执行脚本：
+```shell
+./test.sh first_arg second_arg
+```
+
+执行结果如下：
+```shell
+./test.sh: line 2: !/bin/sh: No such file or directory
+argc: 3
+argv: first_arg second arg
+```
 
 参考链接：
 1. [Container Network Is Simple](https://iximiuz.com/en/posts/container-networking-is-simple/)
