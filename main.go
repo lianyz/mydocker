@@ -21,6 +21,8 @@ func main() {
 	app.Name = "mydocker"
 	app.Usage = usage
 
+	logrus.Infof("main process pid: %d", os.Getpid())
+
 	app.Commands = []cli.Command{
 		initCommand,
 		runCommand,

@@ -85,7 +85,7 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 		container.DeleteContainerInfo(containerName)
 	}
 
-	logrus.Infof("run finished")
+	logrus.Infof("run finished. pid: %d", os.Getpid())
 }
 
 func setNetwork(net string, containerInfo *container.ContainerInfo) {
