@@ -38,6 +38,7 @@ func RunContainerInitProcess(asChild bool) error {
 		err = runProcessInsteadParent(cmdArray)
 	}
 	if err != nil {
+		logrus.Errorf("run container init process failed. commands:%v, err: %v", cmdArray, err)
 		return err
 	}
 
