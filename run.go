@@ -30,7 +30,8 @@ func Run(cmdArray []string, tty bool, asChild bool, res *subsystem.ResourceConfi
 		return
 	}
 
-	logrus.Infof("start parent process succeed. pid:%d", parent.Process.Pid)
+	logrus.Infof("start parent process succeed. docker run process id: %d container parent process id:%d",
+		os.Getpid(), parent.Process.Pid)
 
 	containerID := container.GenContainerID(10)
 	if containerName == "" {
