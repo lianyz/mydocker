@@ -164,6 +164,46 @@ argc: 3
 argv: first_arg second arg
 ```
 
+
+### 使用alpine镜像并启动nginx
+
+```shell
+# 修改主机名配置文件
+echo "alpinelinux" > /etc/hostname 
+#使用新设置的主机名立刻生效
+hostname -F /etc/hostname
+
+# 配置DNS Server
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+# 更新apk的源为国内的源
+cat > /etc/apk/repositories <<EOF
+http://mirrors.ustc.edu.cn/alpine/v3.10/main
+http://mirrors.ustc.edu.cn/alpine/v3.10/community
+EOF
+
+# 安装软件包
+apk update
+apk add nginx
+apk add openrc
+
+# Tell openrc loopback and net are already there, since docker handles the networking
+echo 'rc_provide="loopback net"' >> /etc/rc.conf
+
+apk add curl
+
+# 启动nginx服务
+/etc/init.d/nginx start 
+
+# 查看nginx服务状态
+/etc/init.d/nginx status
+
+# 测试试Nginx服务是否正常，返回nginx的404页面错误，表明服务已正常
+curl 192.168.10.2
+
+```
+
+
 参考链接：
 1. [Container Network Is Simple](https://iximiuz.com/en/posts/container-networking-is-simple/)
 2. [从0搭建Linux虚拟网络](https://zhuanlan.zhihu.com/p/199298498)
