@@ -101,7 +101,7 @@ func mountOverlayFS(imagePath, writeLayerPath, mntPath string) error {
 		return err
 	}
 
-	logrus.Info("filesystem info: %v, mntPath: %s", dirs, mntPath)
+	logrus.Infof("filesystem info: %v, mntPath: %s", dirs, mntPath)
 	return nil
 }
 
