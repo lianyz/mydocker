@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
 )
 
@@ -41,11 +42,12 @@ func runProcessInsteadParent(cmdArray []string) error {
 }
 
 func execCommand(cmdName, params string) error {
-	cmd := exec.Command(cmdName, params)
+	cmd := exec.Command(cmdName, strings.Split(params, " ")...)
 	output, err := cmd.Output()
 	if err != nil {
-		logrus.Errorf("iptables output: %v, err: %v", output, err)
+		logrus.Errorf("exec command output: %v, err: %v", output, err)
 		return err
 	}
+	logrus.Infof("exec command succeed. cmdName:%s params:%s", cmdName, params)
 	return nil
 }
