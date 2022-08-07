@@ -164,10 +164,18 @@ argc: 3
 argv: first_arg second arg
 ```
 
+### 导出alpine镜像
+docker run -ti alpine sh
+docker ps
+docker export -o nginx.tar [container-id]
 
-### 使用alpine镜像并启动nginx
+### 使用alpine镜像启动nginx
 
 ```shell
+# 启动镜像
+mydocker network create --driver bridge --subnet 192.168.10.1/24 br0
+mydocker run -ti --name a --net br0 alpine sh
+
 # 修改主机名配置文件
 echo "alpinelinux" > /etc/hostname 
 #使用新设置的主机名立刻生效
@@ -187,6 +195,18 @@ apk update
 apk add nginx
 apk add openrc
 
+
+ # You are attempting to run an openrc service on a
+ # system which openrc did not boot.
+ # You may be inside a chroot or you may have used
+ # another initialization system to boot this system.
+ # In this situation, you will get unpredictable results!
+ # If you really want to do this, issue the following command:
+openrc
+touch /run/openrc/softlevel
+
+
+
 # Tell openrc loopback and net are already there, since docker handles the networking
 echo 'rc_provide="loopback net"' >> /etc/rc.conf
 
@@ -201,6 +221,27 @@ apk add curl
 # 测试试Nginx服务是否正常，返回nginx的404页面错误，表明服务已正常
 curl 192.168.10.2
 
+# 导出镜像至 ./nginx-alpine.tar
+mydocker commit a nginx-alpine
+```
+
+
+### 在alpine上安装并启动nginx后，执行cat /dev/null 命令，报错WARNING: ca-certificates.crt does not contain exactly one certificate or CRL: skipping
+
+
+```shell
+# mount
+
+overlay on / type overlay (rw,relatime,lowerdir=/root/alpine,upperdir=/root/writeLayer/a,workdir=/root/work)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev type tmpfs (rw,nosuid,mode=755,inode64)
+```
+
+
+### 启动自己定义的容器
+
+```shell
+d run -ti --name bird2 -net br0 -p 8888:80 nginx-alpine nginx
 ```
 
 

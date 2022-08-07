@@ -96,8 +96,13 @@ func setUpMount() error {
 	err = syscall.Mount("tmpfs", "/dev", "tmpfs",
 		syscall.MS_NOSUID|syscall.MS_STRICTATIME, "mode=755")
 	if err != nil {
-		logrus.Errorf("mount tmpfs, ere: %v", err)
+		logrus.Errorf("mount tmpfs, err: %v", err)
 		return err
+	}
+
+	err = execCommand("touch", "/dev/null")
+	if err != nil {
+		logrus.Errorf("exec command err: %v", err)
 	}
 
 	return nil

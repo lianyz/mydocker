@@ -39,3 +39,13 @@ func runProcessInsteadParent(cmdArray []string) error {
 	logrus.Infof("end syscall exec cmds: %v", cmdArray)
 	return syscall.Exec(path, cmdArray[0:], os.Environ())
 }
+
+func execCommand(cmdName, params string) error {
+	cmd := exec.Command(cmdName, params)
+	output, err := cmd.Output()
+	if err != nil {
+		logrus.Errorf("iptables output: %v, err: %v", output, err)
+		return err
+	}
+	return nil
+}
