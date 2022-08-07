@@ -100,11 +100,6 @@ func setUpMount() error {
 		return err
 	}
 
-	err = execCommand("mknod", "/dev/null c 1 3")
-	if err != nil {
-		logrus.Errorf("exec command err: %v", err)
-	}
-
 	return nil
 }
 
