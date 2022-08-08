@@ -73,10 +73,10 @@ func NewParentProcess(tty bool, asChild bool,
 
 	logrus.Infof("change workdir, new:%s, old:%s", common.MntPath, cmd.Dir)
 
-	err = execCommand("mknod", "/dev/null c 1 3")
-	if err != nil {
-		logrus.Errorf("exec command err: %v", err)
-	}
+	//err = execCommand("mknod", "/dev/null c 1 3")
+	//if err != nil {
+	//	logrus.Errorf("exec command err: %v", err)
+	//}
 
 	// 指定容器初始化后的工作目录
 	cmd.Dir = path.Join(common.MntPath, containerName)
