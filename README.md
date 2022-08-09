@@ -196,13 +196,15 @@ apk add nginx
 apk add openrc
 
 
+# 执行该命令时，当前目录不能为/dev，否则会报错误，导致nginx启动失败
+openrc
+
  # You are attempting to run an openrc service on a
  # system which openrc did not boot.
  # You may be inside a chroot or you may have used
  # another initialization system to boot this system.
  # In this situation, you will get unpredictable results!
  # If you really want to do this, issue the following command:
-openrc
 touch /run/openrc/softlevel
 
 

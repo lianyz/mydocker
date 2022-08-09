@@ -100,6 +100,11 @@ func setUpMount() error {
 		return err
 	}
 
+	err = execCommand("openrc", "")
+	if err != nil {
+		logrus.Errorf("exec command openrc. err: %v", err)
+	}
+
 	return nil
 }
 
