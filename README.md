@@ -258,6 +258,8 @@ proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
 tmpfs on /dev type tmpfs (rw,nosuid,mode=755,inode64)
 ```
 
+在容器创建时，完成 mount tmpfs后，通过os.Create创建/dev/null文件   [container/init.go 103 line]
+
 
 ### 启动自己定义的容器
 
