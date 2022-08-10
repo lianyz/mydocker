@@ -100,6 +100,13 @@ func setUpMount() error {
 		return err
 	}
 
+	execCommand("cd", "/root")
+	execCommand("pwd", "")
+	execCommand("ls", "")
+	execCommand("cd", "/dev")
+	execCommand("pwd", "")
+	execCommand("ls", "")
+
 	err = execCommand("touch", "/dev/null")
 	if err != nil {
 		logrus.Errorf("exec command openrc. err: %v", err)

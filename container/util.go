@@ -45,9 +45,10 @@ func execCommand(cmdName, params string) error {
 	cmd := exec.Command(cmdName, strings.Split(params, " ")...)
 	output, err := cmd.Output()
 	if err != nil {
-		logrus.Errorf("exec command output: %v, err: %v", output, err)
+		logrus.Errorf("exec command failed. cmd name: %s, params: %s, output: %v, err: %v",
+			cmdName, params, output, err)
 		return err
 	}
-	logrus.Infof("exec command succeed. cmdName:%s params:%s", cmdName, params)
+	logrus.Infof("exec command succeed. cmdName: %s params: %s \noutput: %v", cmdName, params, output)
 	return nil
 }
