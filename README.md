@@ -223,9 +223,28 @@ apk add curl
 # 测试试Nginx服务是否正常，返回nginx的404页面错误，表明服务已正常
 curl 192.168.10.2
 
-# 导出镜像至 ./nginx-alpine.tar
+# 让nginx在前台运行
+echo "daemon off;" >> /etc/nginx/nginx.conf
+
+# 在主机进程中导出镜像至 ./nginx-alpine.tar
 mydocker commit a nginx-alpine
+
+# 在主机进程中运行新的镜像
+d run -d --name bird -net br0 -p 8888:80 nginx-alpine nginx
+
+# 在主机进程中查看nginx进程运行情况
+ps -ef | grep nginx
+
+# 进入容器内部
+mydocker exec bird sh
+
+# 查看内部IP，发现是192.168.10.3
+curl 192.168.10.3
+
+# 在主机进程测试（主机IP为192.168.34.2）
+curl 192.168.34.2:8888
 ```
+
 
 
 ### 在alpine上安装并启动nginx后，执行cat /dev/null 命令，报错WARNING: ca-certificates.crt does not contain exactly one certificate or CRL: skipping
