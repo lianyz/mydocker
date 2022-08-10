@@ -41,6 +41,16 @@ func runProcessInsteadParent(cmdArray []string) error {
 	return syscall.Exec(path, cmdArray[0:], os.Environ())
 }
 
+func changeDir(dirName string) error {
+	err := os.Chdir(dirName)
+	if err != nil {
+		logrus.Errorf("change dir failed. dir: %s, err: %v", dirName, err)
+		return err
+	}
+
+	return nil
+}
+
 func execCommand(cmdName, params string) error {
 	cmd := exec.Command(cmdName, strings.Split(params, " ")...)
 	output, err := cmd.Output()
