@@ -100,21 +100,7 @@ func setUpMount() error {
 		return err
 	}
 
-	changeDir("/root")
-	changeDir("/dev")
-	file, err := os.Create("/dev/null")
-	if err != nil {
-		logrus.Errorf("create /dev/null failed. err: %v", err)
-	}
-	file.Close()
-
-	execCommand("cd", "/root")
-	execCommand("pwd", "")
-	execCommand("ls", "")
-	execCommand("cd", "/dev")
-	execCommand("pwd", "")
-	execCommand("ls", "")
-	execCommand("touch", "/dev/null")
+	touchFile("/dev/null")
 
 	return nil
 }

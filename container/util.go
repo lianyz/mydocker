@@ -51,6 +51,17 @@ func changeDir(dirName string) error {
 	return nil
 }
 
+func touchFile(filePath string) error {
+
+	file, err := os.Create(filePath)
+	defer file.Close()
+	if err != nil {
+		logrus.Errorf("create /dev/null failed. filePath: %s err: %v", filePath, err)
+		return err
+	}
+	return nil
+}
+
 func execCommand(cmdName, params string) error {
 	cmd := exec.Command(cmdName, strings.Split(params, " ")...)
 	output, err := cmd.Output()
