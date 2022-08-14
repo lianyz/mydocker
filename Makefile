@@ -77,6 +77,10 @@ myredis:
 myflask:
 	./bin/mydocker run -ti -net br0 --name myflask -p 5000:5000 myflask python3 /root/app.py
 
+.PHONY: clean
+clean:
+	./cleanup.sh
+
 .PHONY: test
 test:
 	go test ./network
