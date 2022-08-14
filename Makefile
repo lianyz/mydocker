@@ -59,15 +59,23 @@ commit:
 
 .PHONY: net
 net:
-	./bin/mydocker network create --driver bridge --subnet 192.168.10.1/24 testbridge
+	./bin/mydocker network create --driver bridge --subnet 192.168.20.1/24 br0
 
 .PHONY: d1
 d1:
-	./bin/mydocker run -ti -net testbridge -p 81:81 busybox sh
+	./bin/mydocker run -ti -net br0 -p 81:81 busybox sh
 
 .PHONY: d2
 d2:
-	./bin/mydocker run -ti -net testbridge -p 82:82 busybox sh
+	./bin/mydocker run -ti -net br0 -p 82:82 busybox sh
+
+.PHONY: myredis
+myredis:
+	./bin/mydocker run -d --name myredis -net br0 myredis /usr/bin/redis-server /etc/redis.conf
+
+.PHONY: myflask
+myflask:
+	./bin/mydocker run -ti -net br0 --name myflask -p 5000:5000 myflask python3 /root/app.py
 
 .PHONY: test
 test:

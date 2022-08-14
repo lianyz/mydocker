@@ -245,6 +245,27 @@ curl 192.168.10.3
 curl 192.168.34.2:8888
 ```
 
+### 制作redis镜像
+
+```shell
+mydocker network create --driver bridge --subnet 192.168.20.1/24 br0
+d run -ti -net br0 --name myredis myalpine sh
+apk add redis
+find / -name redis*
+vi /etc/redis.conf
+
+# 
+# bind 127.0.0.1 
+# 修改为
+bind 0.0.0.0
+protected-mode yes 
+# 修改为
+protected-mode no
+#
+
+d commit myredis myredis
+
+```
 
 
 ### 制作myflask镜像
@@ -272,7 +293,7 @@ mydocker commit myflask myflask
 ### 运行redis和flask
 ```shell
 mydocker network create --driver bridge --subnet 192.168.20.1/24 br0
-mydocker run -d --name myredis -net br0 myredis /usr/bin/redis-server
+mydocker run -d --name myredis -net br0 myredis /usr/bin/redis-server /etc/redis.conf
 mydocker logs myredis
 
 # 显示结果为
@@ -290,7 +311,8 @@ ifconfig
 
 # 显示的IP地址应为192.168.20.2
 
-mydocker run -ti -net br0 --name myflask -p 5000:5000 myflask python /root/app.py
+mydocker run -ti -net br0 --name myflask -p 5000:5000 myflask python3 /root/app.py
+
 ```
 
 
