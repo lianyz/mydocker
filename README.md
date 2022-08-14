@@ -247,6 +247,55 @@ curl 192.168.34.2:8888
 
 
 
+### 制作myflask镜像
+
+```shell
+d run -ti -net br0 --name myflask myalpine sh
+
+# 进入容器后运行
+apk add python3
+cd /root
+wget wget https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py
+
+pip install flask
+pip install redis
+apk add vim
+touch /root/app.py
+
+# 在主机进程中运行
+cd /root
+mydocker commit myflask myflask
+```
+
+
+### 运行redis和flask
+```shell
+mydocker network create --driver bridge --subnet 192.168.20.1/24 br0
+mydocker run -d --name myredis -net br0 myredis /usr/bin/redis-server
+mydocker logs myredis
+
+# 显示结果为
+1:C 13 Aug 2022 13:51:46.048 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 13 Aug 2022 13:51:46.048 # Redis version=5.0.11, bits=64, commit=23c8f9b2, modified=0, pid=1, just started
+1:C 13 Aug 2022 13:51:46.048 # Warning: no config file specified, using the default config. In order to specify a config file use /usr/bin/redis-server /path/to/redis.conf
+1:M 13 Aug 2022 13:51:46.049 * Increased maximum number of open files to 10032 (it was originally set to 1024).
+1:M 13 Aug 2022 13:51:46.050 * Running mode=standalone, port=6379.
+1:M 13 Aug 2022 13:51:46.050 # Server initialized
+1:M 13 Aug 2022 13:51:46.051 * Ready to accept connections
+
+
+mydocker exec myredis sh
+ifconfig
+
+# 显示的IP地址应为192.168.20.2
+
+mydocker run -ti -net br0 --name myflask -p 5000:5000 myflask python /root/app.py
+```
+
+
+
+
 ### 在alpine上安装并启动nginx后，执行cat /dev/null 命令，报错WARNING: ca-certificates.crt does not contain exactly one certificate or CRL: skipping
 
 
