@@ -254,10 +254,12 @@ apk add redis
 find / -name redis*
 vi /etc/redis.conf
 
-# 
-# bind 127.0.0.1 
+# 将
+bind 127.0.0.1 
 # 修改为
 bind 0.0.0.0
+
+# 将
 protected-mode yes 
 # 修改为
 protected-mode no
